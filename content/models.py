@@ -4,7 +4,7 @@ import uuid
 from marshmallow import Schema, fields
 
 
-class Service():
+class Service:
 	def __init__(self, name, description, category, provider, picture):
 		self.id = uuid.uuid4()
 		self.name = name

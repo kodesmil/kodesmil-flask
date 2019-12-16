@@ -1,12 +1,11 @@
 from flask import Blueprint, jsonify, request
 
-from pymongo import MongoClient
+from _utils.db import db_conn
 
 from .models import *
 
 content = Blueprint('content', __name__)
-db_client = MongoClient('localhost', 27017)
-db = db_client.kodesmil
+db = db_conn()
 
 
 @content.route('/content')
