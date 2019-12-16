@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, request
+from bson.objectid import ObjectId
+import datetime as dt
 
 from _utils.db import db_conn
 
 from .models import *
-
-from bson.objectid import ObjectId
 
 content = Blueprint('content', __name__)
 db = db_conn()
@@ -18,6 +18,8 @@ service_id_fields = [
 
 # SERVICES
 
+# returns every Service instances in DB
+
 
 @content.route('/content/services')
 def get_services():
@@ -30,13 +32,14 @@ def get_services():
 
 @content.route('/content/services', methods=['POST'])
 def add_service():
-	instance = ServiceSchema().load(request.get_json())
-	print(instance)
+	raw_data = request.get_json()
+	raw_data['updated_at'] = dt.datetime.now()
+	instance = ServiceSchema().load(request.get_json(raw_data))
 	db.services.insert_one(instance.data)
 	return '', 204
 
 
-# filter services by anything you like, eg. id, category, provider etc.
+# filter Services by anything you like, eg. id, category, provider etc.
 
 
 @content.route('/content/services/filter')
@@ -108,6 +111,8 @@ def get_service_slots():
 
 @content.route('/content/service-slots', methods=['POST'])
 def add_service_slot():
-	instance = ServiceSlotSchema().load(request.get_json())
+	raw_data = request.get_json()
+	raw_data['updated_at'] = dt.datetime.now()
+	instance = ServiceSlotSchema().load(raw_data)
 	db.service_slots.insert_one(instance.data)
 	return '', 204
