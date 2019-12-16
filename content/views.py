@@ -9,6 +9,12 @@ from bson.objectid import ObjectId
 content = Blueprint('content', __name__)
 db = db_conn()
 
+service_id_fields = [
+	'_id',
+	'category',
+	'provider'
+]
+
 
 # SERVICES
 
@@ -30,6 +36,26 @@ def add_service():
 	return '', 204
 
 
+# filter services by anything you like, eg. id, category, provider etc.
+
+
+@content.route('/content/services/filter')
+def filter_services():
+	schema = ServiceSchema(many=True)
+
+	filters = {}
+	for key in request.json:
+		if key in service_id_fields:
+			filters[key] = ObjectId(request.json[key])
+		else:
+			filters[key] = request.json[key]
+
+	instances = schema.dump(
+		db.services.find(filters)
+	)
+	return jsonify(instances.data)
+
+
 # SERVICE CATEGORIES
 
 
@@ -47,19 +73,6 @@ def add_service_category():
 	instance = ServiceCategorySchema().load(request.get_json())
 	db.service_categories.insert_one(instance.data)
 	return '', 204
-
-
-@content.route('/content/service-categories/services')
-def get_services_by_category():
-	schema = ServiceSchema(many=True)
-	instances = schema.dump(
-		db.services.find(
-			{
-				"category": ObjectId(request.json['category_id'])
-			}
-		)
-	)
-	return jsonify(instances.data)
 
 
 # SERVICE PROVIDERS
