@@ -4,6 +4,9 @@ import uuid
 from marshmallow import Schema, fields
 
 
+# SERVICE
+
+
 class Service:
 	def __init__(self, name, description, category, provider, picture):
 		self.id = uuid.uuid4()
@@ -30,7 +33,10 @@ class ServiceSchema(Schema):
 	updated_at = fields.Date()
 
 
-class ServiceCategory():
+# SERVICE CATEGORIES
+
+
+class ServiceCategory:
 	def __init__(self, name):
 		self.id = uuid.uuid4()
 		self.name = name
@@ -44,7 +50,9 @@ class ServiceCategorySchema(Schema):
 	name = fields.Str()
 
 
-class ServiceProvider():
+# SERVICE PROVIDERS
+
+class ServiceProvider:
 	def __init__(self, name, owner_id):
 		self.id = uuid.uuid4()
 		self.name = name
@@ -60,7 +68,10 @@ class ServiceProviderSchema(Schema):
 	owner_id = fields.UUID()
 
 
-class ServiceSlot():
+# SERVICE SLOTS
+
+
+class ServiceSlot:
 	def __init__(self, duration, service, starting_at):
 		self.id = uuid.uuid4()
 		self.duration = duration
