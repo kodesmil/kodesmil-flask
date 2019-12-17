@@ -5,4 +5,4 @@ flask-cors
 six
 marshmallow
 pymongo
-bson
+flask_monitoringdashboard

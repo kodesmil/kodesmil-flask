@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from bson.objectid import ObjectId
 import datetime as dt
+from flask_apispec import use_kwargs, marshal_with
 
 from _utils.db import db_conn
 
@@ -20,7 +21,7 @@ service_id_fields = [
 
 # returns every Service instances in DB
 
-
+@marshal_with(ServiceSchema(many=True))
 @content.route('/content/services')
 def get_services():
 	schema = ServiceSchema(many=True)
