@@ -3,9 +3,7 @@ from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
 
-from ._debug import db
-
-from .models import *
+from models import *
 
 content = Blueprint('content', __name__)
 
@@ -14,7 +12,6 @@ service_id_fields = [
 	'category',
 	'provider'
 ]
-
 
 # SERVICES
 

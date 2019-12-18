@@ -3,7 +3,6 @@ import os
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from flask import Flask
-from .views import *
 #import flask_monitoringdashboard as dashboard
 from flask_apispec import FlaskApiSpec
 
@@ -14,9 +13,10 @@ from flask_pymongo import PyMongo
 # happy debugging! ;)
 
 # app setup
+import views
 
 app = Flask(__name__)
-app.register_blueprint(content)
+app.register_blueprint(views.content)
 
 app.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
 
@@ -42,18 +42,18 @@ app.config.update({
 
 docs = FlaskApiSpec(app)
 
-docs.register(get_services, endpoint='get_services', blueprint='content')
-docs.register(add_service, endpoint='add_service', blueprint='content')
-docs.register(filter_services, endpoint='filter_services', blueprint='content')
+docs.register(views.get_services, endpoint='get_services', blueprint='content')
+docs.register(views.add_service, endpoint='add_service', blueprint='content')
+docs.register(views.filter_services, endpoint='filter_services', blueprint='content')
 
-docs.register(get_service_categories, endpoint='get_service_categories', blueprint='content')
-docs.register(add_service_category, endpoint='add_service_category', blueprint='content')
+docs.register(views.get_service_categories, endpoint='get_service_categories', blueprint='content')
+docs.register(views.add_service_category, endpoint='add_service_category', blueprint='content')
 
-docs.register(get_service_providers, endpoint='get_service_providers', blueprint='content')
-docs.register(add_service_provider, endpoint='add_service_provider', blueprint='content')
+docs.register(views.get_service_providers, endpoint='get_service_providers', blueprint='content')
+docs.register(views.add_service_provider, endpoint='add_service_provider', blueprint='content')
 
-docs.register(get_service_slots, endpoint='get_service_slots', blueprint='content')
-docs.register(add_service_slot, endpoint='add_service_slot', blueprint='content')
+docs.register(views.get_service_slots, endpoint='get_service_slots', blueprint='content')
+docs.register(views.add_service_slot, endpoint='add_service_slot', blueprint='content')
 
 
 if __name__ == "__main__":

@@ -6,5 +6,6 @@ six
 marshmallow
 pymongo
 #flask_monitoringdashboard
-
+apispec
+flask_apispec
 Flask-PyMongo
