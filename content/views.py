@@ -3,12 +3,11 @@ from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
 
-from _utils.db import db_conn
+from ._debug import db
 
 from .models import *
 
 content = Blueprint('content', __name__)
-db = db_conn()
 
 service_id_fields = [
 	'_id',

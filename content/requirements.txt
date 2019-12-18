@@ -1,0 +1,10 @@
+flask
+python-dotenv
+python-jose
+flask-cors
+six
+marshmallow
+pymongo
+#flask_monitoringdashboard
+
+Flask-PyMongo

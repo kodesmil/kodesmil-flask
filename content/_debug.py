@@ -1,9 +1,13 @@
+import os
+
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from flask import Flask
 from .views import *
-import flask_monitoringdashboard as dashboard
+#import flask_monitoringdashboard as dashboard
 from flask_apispec import FlaskApiSpec
+
+from flask_pymongo import PyMongo
 
 # main file for testing
 # simply run this as flask app
@@ -14,8 +18,14 @@ from flask_apispec import FlaskApiSpec
 app = Flask(__name__)
 app.register_blueprint(content)
 
+app.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
+
+mongo = PyMongo(app)
+db = mongo.db
+
+
 # dashboard setup
-dashboard.bind(app)
+#dashboard.bind(app)
 
 # docs setup
 
@@ -44,3 +54,9 @@ docs.register(add_service_provider, endpoint='add_service_provider', blueprint='
 
 docs.register(get_service_slots, endpoint='get_service_slots', blueprint='content')
 docs.register(add_service_slot, endpoint='add_service_slot', blueprint='content')
+
+
+if __name__ == "__main__":
+    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
+    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
+    app.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
