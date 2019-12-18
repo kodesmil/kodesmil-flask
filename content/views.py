@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from bson.objectid import ObjectId
 import datetime as dt
-from flask_apispec import use_kwargs, marshal_with
+from flask_apispec import marshal_with, doc
 
 from _utils.db import db_conn
 
@@ -21,6 +21,7 @@ service_id_fields = [
 
 # returns every Service instances in DB
 
+@doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema(many=True))
 @content.route('/content/services')
 def get_services():
@@ -30,7 +31,8 @@ def get_services():
 	)
 	return jsonify(instances.data)
 
-
+@doc(tags=['Services'], description='')
+@marshal_with(ServiceSchema())
 @content.route('/content/services', methods=['POST'])
 def add_service():
 	raw_data = request.get_json()
@@ -42,10 +44,17 @@ def add_service():
 
 # filter Services by anything you like, eg. id, category, provider etc.
 
-
+@doc(tags=['Services'], description='')
+@marshal_with(ServiceSchema(many=True))
 @content.route('/content/services/filter')
 def filter_services():
 	schema = ServiceSchema(many=True)
+
+	if not request.json:
+		instances = schema.dump(
+			db.services.find()
+		)
+		return jsonify(instances.data)
 
 	filters = {}
 	for key in request.json:
@@ -62,7 +71,8 @@ def filter_services():
 
 # SERVICE CATEGORIES
 
-
+@doc(tags=['Service Categories'], description='')
+@marshal_with(ServiceCategorySchema(many=True))
 @content.route('/content/service-categories')
 def get_service_categories():
 	schema = ServiceCategorySchema(many=True)
@@ -72,6 +82,8 @@ def get_service_categories():
 	return jsonify(instances.data)
 
 
+@doc(tags=['Service Categories'], description='')
+@marshal_with(ServiceCategorySchema())
 @content.route('/content/service-categories', methods=['POST'])
 def add_service_category():
 	instance = ServiceCategorySchema().load(request.get_json())
@@ -82,6 +94,8 @@ def add_service_category():
 # SERVICE PROVIDERS
 
 
+@doc(tags=['Service Providers'], description='')
+@marshal_with(ServiceProviderSchema(many=True))
 @content.route('/content/service-providers')
 def get_service_providers():
 	schema = ServiceProviderSchema(many=True)
@@ -91,6 +105,8 @@ def get_service_providers():
 	return jsonify(instances.data)
 
 
+@doc(tags=['Service Providers'], description='')
+@marshal_with(ServiceProviderSchema())
 @content.route('/content/service-providers', methods=['POST'])
 def add_service_provider():
 	instance = ServiceProviderSchema().load(request.get_json())
@@ -101,6 +117,8 @@ def add_service_provider():
 # SERVICE SLOTS
 
 
+@doc(tags=['Service Slots'], description='')
+@marshal_with(ServiceSlotSchema(many=True))
 @content.route('/content/service-slots')
 def get_service_slots():
 	schema = ServiceSlotSchema(many=True)
@@ -110,6 +128,8 @@ def get_service_slots():
 	return jsonify(instances.data)
 
 
+@doc(tags=['Service Slots'], description='')
+@marshal_with(ServiceSlotSchema())
 @content.route('/content/service-slots', methods=['POST'])
 def add_service_slot():
 	raw_data = request.get_json()
