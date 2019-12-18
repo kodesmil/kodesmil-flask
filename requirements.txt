@@ -6,4 +6,3 @@ six
 marshmallow
 pymongo
 flask_monitoringdashboard
-apispec
