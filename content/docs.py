@@ -19,8 +19,9 @@ class Documentation:
             'APISPEC_SWAGGER_UI_URL': '/docs/',
         })
         self.docs = FlaskApiSpec(app)
+        self._initialize()
 
-    def initialize(self):
+    def _initialize(self):
         self.docs.register(
             views.get_services,
             endpoint='get_services',

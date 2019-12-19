@@ -4,7 +4,7 @@ import datetime as dt
 from flask_apispec import marshal_with, doc
 
 from models import *
-import views
+from app import db
 
 content = Blueprint('content', __name__)
 
@@ -17,7 +17,6 @@ service_id_fields = [
 # SERVICES
 
 # returns every Service instances in DB
-
 
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema(many=True))

@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: flask
     image: python:latest
-    restart: unless-stopped
+    #restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
