@@ -4,6 +4,7 @@ import datetime as dt
 from flask_apispec import marshal_with, doc
 
 from models import *
+import views
 
 content = Blueprint('content', __name__)
 
