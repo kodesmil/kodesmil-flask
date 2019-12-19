@@ -6,7 +6,9 @@ services:
       dockerfile: Dockerfile
     container_name: flask
     image: python:latest
-    #restart: unless-stopped
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "True"
@@ -19,25 +21,22 @@ services:
       - .:/var/www
     depends_on:
       - mongodb
-    networks:
-      - frontend
-      - backend
 
   mongodb:
     image: mongo:latest
     container_name: mongodb
     restart: unless-stopped
     command: mongod --auth
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: adminpass
+      MONGO_INITDB_ROOT_PASSWORD: admin
       MONGO_INITDB_DATABASE: content
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /dev/null
     volumes:
       - mongodbdata:/data/db
-    networks:
-      - backend
 
   webserver:
     build:
@@ -58,14 +57,6 @@ services:
       - nginxdata:/var/log/nginx
     depends_on:
       - flask
-    networks:
-      - frontend
-
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
 
 volumes:
   mongodbdata:
