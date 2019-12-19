@@ -10,38 +10,38 @@ from marshmallow import Schema, fields
 
 
 class ServiceSchema(Schema):
-	_id = fields.String()
-	name = fields.Str()
-	description = fields.Str()
-	category = fields.Str()
-	provider = fields.Str()
-	picture = fields.Url()
-	updated_at = fields.Date()
+    _id = fields.String()
+    name = fields.Str()
+    description = fields.Str()
+    category = fields.Str()
+    provider = fields.Str()
+    picture = fields.Url()
+    updated_at = fields.Date()
 
 
 # SERVICE CATEGORIES
 
 
 class ServiceCategorySchema(Schema):
-	_id = fields.Str()
-	name = fields.Str()
+    _id = fields.Str()
+    name = fields.Str()
 
 
 # SERVICE PROVIDERS
 
 
 class ServiceProviderSchema(Schema):
-	_id = fields.Str()
-	name = fields.Str()
-	owner_id = fields.Str()
+    _id = fields.Str()
+    name = fields.Str()
+    owner_id = fields.Str()
 
 
 # SERVICE SLOTS
 
 
 class ServiceSlotSchema(Schema):
-	_id = fields.Str()
-	duration = fields.Integer()
-	service = fields.Str()
-	starting_at = fields.Date()
-	updated_at = fields.Date()
+    _id = fields.Str()
+    duration = fields.Integer()
+    service = fields.Str()
+    starting_at = fields.Date()
+    updated_at = fields.Date()
