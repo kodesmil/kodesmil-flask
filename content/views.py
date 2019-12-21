@@ -26,7 +26,7 @@ def get_services():
     instances = schema.dump(
         db.services.find()
     )
-    return jsonify(instances.data)
+    return jsonify(instances)
 
 
 @doc(tags=['Services'], description='')
@@ -36,7 +36,7 @@ def add_service():
     raw_data = request.get_json()
     raw_data['updated_at'] = dt.datetime.now()
     instance = ServiceSchema().load(request.get_json(raw_data))
-    db.services.insert_one(instance.data)
+    db.services.insert_one(instance)
     return '', 204
 
 
@@ -52,7 +52,7 @@ def filter_services():
         instances = schema.dump(
             db.services.find()
         )
-        return jsonify(instances.data)
+        return jsonify(instances)
 
     filters = {}
     for key in request.json:
@@ -64,7 +64,7 @@ def filter_services():
     instances = schema.dump(
         db.services.find(filters)
     )
-    return jsonify(instances.data)
+    return jsonify(instances)
 
 
 # SERVICE CATEGORIES
@@ -77,7 +77,7 @@ def get_service_categories():
     instances = schema.dump(
         db.service_categories.find()
     )
-    return jsonify(instances.data)
+    return jsonify(instances)
 
 
 @doc(tags=['Service Categories'], description='')
@@ -85,7 +85,7 @@ def get_service_categories():
 @content.route('/content/service-categories', methods=['POST'])
 def add_service_category():
     instance = ServiceCategorySchema().load(request.get_json())
-    db.service_categories.insert_one(instance.data)
+    db.service_categories.insert_one(instance)
     return '', 204
 
 
@@ -100,7 +100,7 @@ def get_service_providers():
     instances = schema.dump(
         db.service_providers.find()
     )
-    return jsonify(instances.data)
+    return jsonify(instances)
 
 
 @doc(tags=['Service Providers'], description='')
@@ -108,7 +108,7 @@ def get_service_providers():
 @content.route('/content/service-providers', methods=['POST'])
 def add_service_provider():
     instance = ServiceProviderSchema().load(request.get_json())
-    db.service_providers.insert_one(instance.data)
+    db.service_providers.insert_one(instance)
     return '', 204
 
 
@@ -123,7 +123,7 @@ def get_service_slots():
     instances = schema.dump(
         db.service_slots.find()
     )
-    return jsonify(instances.data)
+    return jsonify(instances)
 
 
 @doc(tags=['Service Slots'], description='')
@@ -133,5 +133,5 @@ def add_service_slot():
     raw_data = request.get_json()
     raw_data['updated_at'] = dt.datetime.now()
     instance = ServiceSlotSchema().load(raw_data)
-    db.service_slots.insert_one(instance.data)
+    db.service_slots.insert_one(instance)
     return '', 204
