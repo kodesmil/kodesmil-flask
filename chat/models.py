@@ -26,5 +26,3 @@ class ChatRoomMessageSchema(Schema):
 	text = fields.Str()
 	author_id = fields.Str()
 	chatroom_id = fields.Str()
-	created_at = fields.Date()
-	updated_at = fields.Date()
