@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-import flask_monitoringdashboard as dashboard
+#import flask_monitoringdashboard as dashboard
 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ app.register_blueprint(views.content)
 import docs
 docs = docs.Documentation(app)
 
-dashboard.bind(app)
+#dashboard.bind(app)
 
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)

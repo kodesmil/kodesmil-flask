@@ -6,6 +6,8 @@ from flask_apispec import marshal_with, doc
 from models import *
 from app import db
 
+from auth import auth
+
 content = Blueprint('content', __name__)
 
 service_id_fields = [
@@ -95,6 +97,7 @@ def add_service_category():
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema(many=True))
 @content.route('/content/service-providers')
+@auth
 def get_service_providers():
     schema = ServiceProviderSchema(many=True)
     instances = schema.dump(
