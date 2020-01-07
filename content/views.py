@@ -6,7 +6,7 @@ from flask_apispec import marshal_with, doc
 from models import *
 from app import db
 
-from auth import auth
+from auth import require_auth_and_permissions
 
 content = Blueprint('content', __name__)
 
@@ -93,11 +93,10 @@ def add_service_category():
 
 # SERVICE PROVIDERS
 
-
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema(many=True))
 @content.route('/content/service-providers')
-@auth
+@require_auth_and_permissions(['flask-content-services'])
 def get_service_providers():
     schema = ServiceProviderSchema(many=True)
     instances = schema.dump(
