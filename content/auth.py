@@ -34,3 +34,13 @@ def require_auth_and_permissions(permissions=[]):
 			return func(*args, **kwargs)
 		return wrapper
 	return real_decorator
+
+
+def get_user_id(auth_token):
+	headers = {
+		'Content-Type': 'application/json',
+		'Authorization': '{}'.format(auth_token)
+	}
+	response = requests.get(INFO_URL, headers=headers).json()
+	return response.inum
+

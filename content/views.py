@@ -23,6 +23,7 @@ service_id_fields = [
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema(many=True))
 @content.route('/content/services')
+@require_auth_and_permissions()
 def get_services():
     schema = ServiceSchema(many=True)
     instances = schema.dump(
@@ -34,6 +35,7 @@ def get_services():
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema())
 @content.route('/content/services', methods=['POST'])
+@require_auth_and_permissions()
 def add_service():
     raw_data = request.get_json()
     raw_data['updated_at'] = dt.datetime.now()
@@ -47,6 +49,7 @@ def add_service():
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema(many=True))
 @content.route('/content/services/filter')
+@require_auth_and_permissions()
 def filter_services():
     schema = ServiceSchema(many=True)
 
@@ -74,6 +77,7 @@ def filter_services():
 @doc(tags=['Service Categories'], description='')
 @marshal_with(ServiceCategorySchema(many=True))
 @content.route('/content/service-categories')
+@require_auth_and_permissions()
 def get_service_categories():
     schema = ServiceCategorySchema(many=True)
     instances = schema.dump(
@@ -85,6 +89,7 @@ def get_service_categories():
 @doc(tags=['Service Categories'], description='')
 @marshal_with(ServiceCategorySchema())
 @content.route('/content/service-categories', methods=['POST'])
+@require_auth_and_permissions()
 def add_service_category():
     instance = ServiceCategorySchema().load(request.get_json())
     db.service_categories.insert_one(instance)
@@ -96,7 +101,7 @@ def add_service_category():
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema(many=True))
 @content.route('/content/service-providers')
-@require_auth_and_permissions(['flask-content-services'])
+@require_auth_and_permissions()
 def get_service_providers():
     schema = ServiceProviderSchema(many=True)
     instances = schema.dump(
@@ -108,6 +113,7 @@ def get_service_providers():
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema())
 @content.route('/content/service-providers', methods=['POST'])
+@require_auth_and_permissions()
 def add_service_provider():
     instance = ServiceProviderSchema().load(request.get_json())
     db.service_providers.insert_one(instance)
@@ -120,6 +126,7 @@ def add_service_provider():
 @doc(tags=['Service Slots'], description='')
 @marshal_with(ServiceSlotSchema(many=True))
 @content.route('/content/service-slots')
+@require_auth_and_permissions()
 def get_service_slots():
     schema = ServiceSlotSchema(many=True)
     instances = schema.dump(
@@ -131,6 +138,7 @@ def get_service_slots():
 @doc(tags=['Service Slots'], description='')
 @marshal_with(ServiceSlotSchema())
 @content.route('/content/service-slots', methods=['POST'])
+@require_auth_and_permissions()
 def add_service_slot():
     raw_data = request.get_json()
     raw_data['updated_at'] = dt.datetime.now()
