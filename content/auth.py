@@ -2,6 +2,7 @@ import requests
 from flask import Response, request
 from functools import wraps
 
+API_URL = 'http://localhost:5000'
 
 INFO_URL = 'https://auth.kodesmil.com/oxauth/restv1/userinfo'
 
@@ -42,5 +43,27 @@ def get_user_id(auth_token):
 		'Authorization': '{}'.format(auth_token)
 	}
 	response = requests.get(INFO_URL, headers=headers).json()
-	return response.inum
+	return response['inum']
 
+
+# takes an endpoint and model owner field (eg. '/content/service' and 'provider')
+# checks if user requesting to perform operations on data
+# is this instance owner
+
+def check_ownership(endpoint, owner_field):
+	def real_decorator(func):
+		@wraps(func)
+		def wrapper(*args, **kwargs, ):
+			user_id = get_user_id(request.headers.get('Authorization'))
+			headers = {
+				'Content-Type': 'application/json',
+				'Authorization': '{}'.format(request.headers.get('Authorization'))
+			}
+			response = requests.get(API_URL+endpoint+'/'+kwargs['instance_id'], headers=headers)
+
+			if response.json()[owner_field] != user_id:
+				return Response('Permissions required', 401, {'WWW-Authenticate': 'Basic realm="Permissions Required"'})
+
+			return func(*args, **kwargs)
+		return wrapper
+	return real_decorator

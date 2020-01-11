@@ -6,7 +6,7 @@ from flask_apispec import marshal_with, doc
 from models import *
 from app import db
 
-from auth import require_auth_and_permissions
+from auth import require_auth_and_permissions, check_ownership
 
 content = Blueprint('content', __name__)
 
@@ -22,7 +22,7 @@ service_id_fields = [
 
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema(many=True))
-@content.route('/content/services')
+@content.route('/content/services', methods=['GET'])
 @require_auth_and_permissions()
 def get_services():
     schema = ServiceSchema(many=True)
@@ -31,6 +31,22 @@ def get_services():
     )
     return jsonify(instances)
 
+# return only one instance data
+
+@doc(tags=['Services'], description='')
+@marshal_with(ServiceSchema(many=True))
+@content.route('/content/services/<string:instance_id>', methods=['GET'])
+@require_auth_and_permissions()
+def get_service(instance_id):
+    schema = ServiceSchema()
+
+    instance = schema.dump(
+        db.services.find_one({'_id': ObjectId(instance_id)})
+    )
+
+    return jsonify(instance)
+
+# creates an instance
 
 @doc(tags=['Services'], description='')
 @marshal_with(ServiceSchema())
@@ -38,10 +54,35 @@ def get_services():
 @require_auth_and_permissions()
 def add_service():
     raw_data = request.get_json()
-    raw_data['updated_at'] = dt.datetime.now()
+    raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
     instance = ServiceSchema().load(request.get_json(raw_data))
     db.services.insert_one(instance)
+    return '', 201
+
+# replaces an instance with recieved data
+# but, only if user is owner of this instance
+
+@doc(tags=['Services'], description='')
+@marshal_with(ServiceSchema())
+@content.route('/content/services/<string:instance_id>', methods=['PUT'])
+@require_auth_and_permissions()
+@check_ownership('/content/services', 'provider')
+def replace_service(instance_id):
+    raw_data = request.get_json()
+    raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
+    instance = ServiceSchema().load(request.get_json(raw_data))
+    result = db.services.replace_one({'_id': ObjectId(instance_id)}, instance)
+
+    '''
+    if not result.matched_count and not result.matched_count:
+        raw_data['_id'] = service_id
+        instance = ServiceSchema().load(request.get_json(raw_data))
+        db.services.insert_one(instance)
+        return '', 201
+    '''
+
     return '', 204
+
 
 
 # filter Services by anything you like, eg. id, category, provider etc.
@@ -141,7 +182,7 @@ def get_service_slots():
 @require_auth_and_permissions()
 def add_service_slot():
     raw_data = request.get_json()
-    raw_data['updated_at'] = dt.datetime.now()
+    raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
     instance = ServiceSlotSchema().load(raw_data)
     db.service_slots.insert_one(instance)
     return '', 204

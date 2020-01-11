@@ -16,7 +16,7 @@ class ServiceSchema(Schema):
     category = fields.Str()
     provider = fields.Str()
     picture = fields.Url()
-    updated_at = fields.Date()
+    updated_at = fields.DateTime()
 
 
 # SERVICE CATEGORIES
@@ -43,5 +43,5 @@ class ServiceSlotSchema(Schema):
     _id = fields.Str()
     duration = fields.Integer()
     service = fields.Str()
-    starting_at = fields.Date()
-    updated_at = fields.Date()
+    starting_at = fields.DateTime()
+    updated_at = fields.DateTime()
