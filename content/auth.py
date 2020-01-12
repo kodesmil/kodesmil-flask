@@ -49,6 +49,7 @@ def get_user_id(auth_token):
 # takes an endpoint and model owner field (eg. '/content/service' and 'provider')
 # checks if user requesting to perform operations on data
 # is this instance owner
+# if an instance has no owner, then access is allowed by default
 
 def check_ownership(endpoint, owner_field):
 	def real_decorator(func):
@@ -63,7 +64,9 @@ def check_ownership(endpoint, owner_field):
 
 			if response.json()[owner_field] != user_id:
 				return Response('Permissions required', 401, {'WWW-Authenticate': 'Basic realm="Permissions Required"'})
-
-			return func(*args, **kwargs)
+			elif response.json()[owner_field] is None:
+				return func(*args, **kwargs)
+			else:
+				return func(*args, **kwargs)
 		return wrapper
 	return real_decorator

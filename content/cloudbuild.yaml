@@ -1,4 +1,0 @@
-steps:
-- name: 'gcr.io/kodesmil/docker-compose'
-  args: ['up']
-tags: ['content']
