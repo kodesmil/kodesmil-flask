@@ -88,7 +88,7 @@ def replace_service(instance_id):
 @content.route('/content/services/<string:instance_id>', methods=['DELETE'])
 @require_auth_and_permissions()
 @check_ownership('/content/services', 'provider')
-def remove_service():
+def remove_service(instance_id):
     result = db.services.delete_one({
         '_id': ObjectId(instance_id)
     })
@@ -129,7 +129,7 @@ def filter_services():
 
 @doc(tags=['Service Categories'], description='')
 @marshal_with(ServiceCategorySchema(many=True))
-@content.route('/content/service-categories')
+@content.route('/content/service-categories', methods=['GET'])
 @require_auth_and_permissions()
 def get_service_categories():
     schema = ServiceCategorySchema(many=True)
@@ -138,22 +138,11 @@ def get_service_categories():
     )
     return jsonify(instances)
 
-
-@doc(tags=['Service Categories'], description='')
-@marshal_with(ServiceCategorySchema())
-@content.route('/content/service-categories', methods=['POST'])
-@require_auth_and_permissions()
-def add_service_category():
-    instance = ServiceCategorySchema().load(request.get_json())
-    db.service_categories.insert_one(instance)
-    return '', 204
-
-
 # SERVICE PROVIDERS
 
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema(many=True))
-@content.route('/content/service-providers')
+@content.route('/content/service-providers', methods=['GET'])
 @require_auth_and_permissions()
 def get_service_providers():
     schema = ServiceProviderSchema(many=True)
@@ -188,7 +177,7 @@ def add_service_provider():
 @doc(tags=['Service Providers'], description='')
 @marshal_with(ServiceProviderSchema())
 @content.route('/content/service-providers/<string:instance_id>', methods=['PUT'])
-@require_auth_frand_permissions()
+@require_auth_and_permissions()
 @check_ownership('/content/service-providers', 'owner_id')
 def replace_service_provider(instance_id):
     raw_data = request.get_json()
@@ -204,12 +193,26 @@ def replace_service_provider(instance_id):
     return '', 204
 
 
+@doc(tags=['Service Providers'], description='')
+@marshal_with(ServiceProviderSchema())
+@content.route('/content/service-providers/<string:instance_id>', methods=['DELETE'])
+@require_auth_and_permissions()
+@check_ownership('/content/service-providers', 'owner_id')
+def remove_service_provider(instance_id):
+    result = db.service_providers.delete_one({
+        '_id': ObjectId(instance_id)
+    })
+    if not result.matched_count:
+        return '', 204
+    return '', 200
+
+
 # SERVICE SLOTS
 
 
 @doc(tags=['Service Slots'], description='')
 @marshal_with(ServiceSlotSchema(many=True))
-@content.route('/content/service-slots')
+@content.route('/content/service-slots', methods=['GET'])
 @require_auth_and_permissions()
 def get_service_slots():
     schema = ServiceSlotSchema(many=True)
@@ -241,3 +244,37 @@ def add_service_slot():
     instance = ServiceSlotSchema().load(raw_data)
     db.service_slots.insert_one(instance)
     return '', 204
+
+# TODO both PUT and DELETE methods need another way to check ownership
+
+@doc(tags=['Service Slots'], description='')
+@marshal_with(ServiceSlotSchema())
+@content.route('/content/service-slots/<string:instance_id>', methods=['PUT'])
+@require_auth_and_permissions()
+#@check_ownership('/content/service-providers', 'owner_id')
+def replace_service_provider(instance_id):
+    raw_data = request.get_json()
+    instance = ServiceSlotSchema().load(request.get_json(raw_data))
+    result = db.service_slots.replace_one({'_id': ObjectId(instance_id)}, instance)
+
+    if not result.matched_count:
+        raw_data['_id'] = ObjectId(instance_id)
+        instance = ServiceSlotSchema().load(request.get_json(raw_data))
+        db.service_slots.insert_one(instance)
+        return '', 201
+
+    return '', 204
+
+
+@doc(tags=['Service Slots'], description='')
+@marshal_with(ServiceProviderSchema())
+@content.route('/content/service-slots/<string:instance_id>', methods=['DELETE'])
+@require_auth_and_permissions()
+#@check_ownership('/content/service-providers', 'owner_id')
+def remove_service_slot(instance_id):
+    result = db.service_slots.delete_one({
+        '_id': ObjectId(instance_id)
+    })
+    if not result.matched_count:
+        return '', 204
+    return '', 200
