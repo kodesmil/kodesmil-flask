@@ -8,12 +8,12 @@ services:
     image: python:latest
     #restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "True"
-      APP_PORT: 5000
-      MONGODB_DATABASE: motim_activites
+      APP_PORT: 5001
+      MONGODB_DATABASE: motim_points
       MONGODB_USERNAME: kodesmil
       MONGODB_PASSWORD: kodesmil
       MONGODB_HOSTNAME: mongodb
@@ -28,11 +28,11 @@ services:
     restart: unless-stopped
     command: mongod --auth
     ports:
-      - "27017:27017"
+      - "27018:27018"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: motim_activities
+      MONGO_INITDB_DATABASE: motim_points
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /dev/null
     volumes:

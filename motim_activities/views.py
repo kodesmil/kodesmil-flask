@@ -12,6 +12,8 @@ import requests
 
 content = Blueprint('content', __name__)
 
+MOTIM_POINTS_URL = 'http://localhost:5001/motim-points'
+
 service_id_fields = [
     '_id',
     'category',
@@ -20,9 +22,20 @@ service_id_fields = [
 
 @doc(tags=['=Activity'], description='')
 @marshal_with(ActivitySchema())
-@content.route('/motim-activity/', methods=['POST'])
+@content.route('/motim-activity', methods=['POST'])
 @require_auth_and_permissions()
 def add_activity():
     instance = ActivitySchema().load(request.get_json())
     db.services.insert_one(instance)
+
+    # ping motim-points microservice about new data
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': '{}'.format(request.headers.get('Authorization'))
+    }
+    requests.get(
+        MOTIM_POINTS_URL,
+        headers=headers
+    )
+
     return '', 201
