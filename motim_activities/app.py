@@ -10,8 +10,8 @@ db = database.Database(app).db
 import views
 app.register_blueprint(views.content)
 
-import docs
-docs = docs.Documentation(app)
+#import docs
+#docs = docs.Documentation(app)
 
 #dashboard.bind(app)
 

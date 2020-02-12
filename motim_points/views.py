@@ -13,7 +13,6 @@ content = Blueprint('content', __name__)
 MOTIM_ACTIVITY_URL = 'http://localhost:5000/motim-activity'
 
 
-
 @doc(tags=['=Activity'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/motim-points', methods=['GET'])

@@ -17,16 +17,16 @@ MOTIM_POINTS_URL = 'http://localhost:5001/motim-points'
 service_id_fields = [
     '_id',
     'category',
-    'provider'
+    'provider',
 ]
 
-@doc(tags=['=Activity'], description='')
+@doc(tags=['Activity'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/motim-activity', methods=['POST'])
 @require_auth_and_permissions()
 def add_activity():
     instance = ActivitySchema().load(request.get_json())
-    db.services.insert_one(instance)
+    db.activities.insert_one(instance)
 
     # ping motim-points microservice about new data
     headers = {
@@ -35,7 +35,7 @@ def add_activity():
     }
     requests.get(
         MOTIM_POINTS_URL,
-        headers=headers
+        headers=headers,
     )
 
     return '', 201

@@ -10,3 +10,4 @@ apispec
 flask_apispec
 Flask-PyMongo
 requests
+marshmallow_enum
