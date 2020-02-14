@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Docker
+*/docker-compose.yml
+
 .DS_Store
 .idea
 flask_monitoringdashboard.db

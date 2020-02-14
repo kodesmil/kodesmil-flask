@@ -12,7 +12,9 @@ import requests
 
 content = Blueprint('content', __name__)
 
-MOTIM_POINTS_URL = 'http://localhost:5001/motim-points'
+# This is local IP of motim_points container
+# Can be checked using `docker inspect motim_points_flask | grep "IPAddress"`
+MOTIM_POINTS_URL = 'http://172.21.0.2:5000/motim-points'
 
 service_id_fields = [
     '_id',
@@ -33,7 +35,7 @@ def add_activity():
         'Content-Type': 'application/json',
         'Authorization': '{}'.format(request.headers.get('Authorization'))
     }
-    requests.get(
+    requests.post(
         MOTIM_POINTS_URL,
         headers=headers,
     )

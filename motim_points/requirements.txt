@@ -10,3 +10,5 @@ apispec
 flask_apispec
 Flask-PyMongo
 requests
+pymongo[srv]
+dnspython

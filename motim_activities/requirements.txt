@@ -11,3 +11,5 @@ flask_apispec
 Flask-PyMongo
 requests
 marshmallow_enum
+pymongo[srv]
+dnspython
