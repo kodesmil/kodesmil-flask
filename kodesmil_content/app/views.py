@@ -2,11 +2,10 @@ from flask import Blueprint, jsonify, request
 from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
+from kodesmil_common.auth import get_user_id, require_auth_and_permissions
 
 from .models import *
 from .app import db
-
-from .auth import require_auth_and_permissions, check_ownership
 
 content = Blueprint('content', __name__)
 

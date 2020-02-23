@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from bson.objectid import ObjectId
 from flask_apispec import marshal_with, doc
+from kodesmil_common.auth import get_user_id, require_auth_and_permissions
 
 from .models import ActivityPointsSchema
 from .app import db
-from .auth import require_auth_and_permissions, get_user_id
 
 import requests
 

@@ -25,14 +25,25 @@ def require_auth_and_permissions(permissions=[]):
 
             # check if user is authenticated
             if response.status_code != requests.codes.ok:
-                return Response('Login required', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+                return Response(
+                    'Login required',
+                    401,
+                    {
+                        'WWW-Authenticate': 'Basic realm="Login Required"',
+                    },
+                )
 
             # check if user has proper permissions, only if permissions were passed in decorator
             if permissions:
                 for perm in permissions:
                     if perm not in response.json()['permissions']:
-                        return Response('Permissions required', 401,
-                                        {'WWW-Authenticate': 'Basic realm="Permissions Required"'})
+                        return Response(
+                            'Permissions required',
+                            401,
+                            {
+                                'WWW-Authenticate': 'Basic realm="Permissions Required"',
+                            },
+                        )
 
             return func(*args, **kwargs)
 
@@ -67,7 +78,13 @@ def check_ownership(endpoint, owner_field):
             response = requests.get(API_URL + endpoint + '/' + kwargs['instance_id'], headers=headers)
 
             if response.json()[owner_field] != user_id:
-                return Response('Permissions required', 401, {'WWW-Authenticate': 'Basic realm="Permissions Required"'})
+                return Response(
+                    'Permissions required',
+                    401,
+                    {
+                        'WWW-Authenticate': 'Basic realm="Permissions Required"'
+                    }
+                )
             elif response.json()[owner_field] is None:
                 return func(*args, **kwargs)
             else:
