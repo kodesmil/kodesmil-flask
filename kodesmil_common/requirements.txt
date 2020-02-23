@@ -12,4 +12,3 @@ requests
 marshmallow_enum
 pymongo[srv]
 dnspython
-kodesmil_common

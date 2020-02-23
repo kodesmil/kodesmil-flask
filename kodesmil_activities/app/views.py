@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
 
+from kodesmil_common.auth import require_auth_and_permissions, get_user_id
 from .models import ActivitySchema
 from .app import db
-from .auth import require_auth_and_permissions, get_user_id
 
 import requests
 

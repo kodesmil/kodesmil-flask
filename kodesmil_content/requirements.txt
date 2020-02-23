@@ -10,3 +10,4 @@ apispec
 flask_apispec
 Flask-PyMongo
 requests
+kodesmil_common==0.0.1
