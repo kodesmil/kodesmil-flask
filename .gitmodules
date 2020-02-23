@@ -1,0 +1,3 @@
+[submodule "motim_points/deps/fit"]
+	path = motim_points/deps/fit
+	url = git@github.com:kodesmil/getGoogleFitData.git

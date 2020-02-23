@@ -14,7 +14,7 @@ content = Blueprint('content', __name__)
 
 # This is local IP of motim_points container
 # Can be checked using `docker inspect motim_activities_flask | grep "IPAddress"`
-MOTIM_ACTIVITY_URL = 'http://172.21.0.3:5000/motim-activity'
+MOTIM_ACTIVITY_URL = 'http://172.21.0.2:5001/motim-activity'
 
 
 @doc(tags=['Activity'], description='')
