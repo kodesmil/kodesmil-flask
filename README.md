@@ -47,3 +47,25 @@ to the `.env` filed as explained [previously](#running-the-example) and then
 
 1. Execute in command line `sh exec.sh` to run the Docker in Linux, or `.\exec.ps1` to run the Docker in Windows.
 2. Try calling [http://localhost:3010/api/public](http://localhost:3010/api/public)
+
+# Ports
+## chat
+    - empty
+
+## content
+    - 5000
+    - 80
+    - 443
+
+## activities
+    - 5001
+    - 81
+    - 444
+
+## points
+    - 5002
+    - 82
+    - 445
+
+## fit
+    - 5003
