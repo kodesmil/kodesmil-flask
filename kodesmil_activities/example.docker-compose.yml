@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: kodesmil_activities_flask
-    image: python:latest
-    #restart: unless-stopped
+    image: kodesmil/kodesmil_activities_flask
+    restart: always
     ports:
       - "5000:5000"
     environment:
@@ -20,28 +20,6 @@ services:
     volumes:
       - .:/var/www
 
-  webserver:
-    build:
-      context: nginx
-      dockerfile: Dockerfile
-    image: alpine:latest
-    container_name: kodesmil_activities_webserver
-    restart: unless-stopped
-    environment:
-      APP_ENV: "prod"
-      APP_NAME: "webserver"
-      APP_DEBUG: "true"
-      SERVICE_NAME: "webserver"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - nginxdata:/var/log/nginx
-    depends_on:
-      - flask
-
 volumes:
   appdata:
-    driver: local
-  nginxdata:
     driver: local

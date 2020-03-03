@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
-from kodesmil_common.auth import get_user_id, require_auth_and_permissions
+from kodesmil_common.auth import require_auth_and_permissions, check_ownership
 
 from .models import *
 from .app import db
@@ -258,7 +258,7 @@ def add_service_slot():
 @content.route('/content/service-slots/<string:instance_id>', methods=['PUT'])
 @require_auth_and_permissions()
 # @check_ownership('/content/service-providers', 'owner_id')
-def replace_service_provider(instance_id):
+def replace_service_slot(instance_id):
     raw_data = request.get_json()
     instance = ServiceSlotSchema().load(request.get_json(raw_data))
     result = db.service_slots.replace_one({'_id': ObjectId(instance_id)}, instance)

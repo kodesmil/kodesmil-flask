@@ -44,11 +44,6 @@ class Documentation:
             endpoint='get_service_categories',
             blueprint='content',
         )
-        self.docs.register(
-            views.add_service_category,
-            endpoint='add_service_category',
-            blueprint='content',
-        )
 
         self.docs.register(
             views.get_service_providers,

@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    run: kodesmil-activities
+  name: kodesmil-activities
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kodesmil-activities
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: kodesmil-activities
+    spec:
+      containers:
+        - name: kodesmil-activities
+          resources:
+            limits:
+              cpu: "0.50"
+              memory: "1.9Gi"
+            requests:
+              cpu: "0.15"
+              memory: "1.0Gi"
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_DEBUG
+              value: "True"
+            - name: APP_ENV
+              value: prod
+            - name: APP_PORT
+              value: "5000"
+            - name: MONGODB_DATABASE
+              value: kodesmil_activities
+            - name: MONGODB_HOSTNAME
+              value: motim0-abanq.mongodb.net
+            - name: MONGODB_PASSWORD
+              value: kodesmil
+            - name: MONGODB_USERNAME
+              value: kodesmil
+          image: kodesmil/kodesmil_activities:latest
+          imagePullPolicy: Always

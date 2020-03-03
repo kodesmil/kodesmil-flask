@@ -132,6 +132,5 @@ dmypy.json
 */docker-compose.yml
 
 .DS_Store
-.idea
+.idea/
 flask_monitoringdashboard.db
-!.idea

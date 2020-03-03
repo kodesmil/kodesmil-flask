@@ -13,3 +13,6 @@ marshmallow_enum
 pymongo[srv]
 dnspython
 kodesmil_common
+httplib2
+google-api-python-client==1.7.11
+oauth2client

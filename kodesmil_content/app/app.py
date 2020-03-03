@@ -13,9 +13,9 @@ from . import views
 
 app.register_blueprint(views.content)
 
-from . import docs
+# from . import docs
 
-docs = docs.Documentation(app)
+# docs = docs.Documentation(app)
 
 # dashboard.bind(app)
 

@@ -2,10 +2,15 @@ from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
 from kodesmil_common.auth import get_user_id, require_auth_and_permissions
 
+from . import db
 from .models import ActivitySchema
-from .app import db
 
 import requests
+
+import httplib2
+from googleapiclient.discovery import build
+from oauth2client.client import AccessTokenCredentials
+
 
 content = Blueprint('content', __name__)
 
@@ -31,6 +36,17 @@ def ping_points(token):
 @content.route('/activities', methods=['POST'])
 @require_auth_and_permissions()
 def add_activity():
+
+    # uncomment this section and have fun ;)
+    '''
+    request_data = request.get_json() # pass GF accessToken in request body as 'access_token'
+    credentials = AccessTokenCredentials(request_data['access_token'], 'my-user-agent/1.0')
+    http = httplib2.Http()
+    http = credentials.authorize(http)
+    google_fit = build('fitness', 'v1', http=http)
+    data_sources_list = google_fit.users().dataSources().list(userId="me").execute()
+    '''
+
     raw_data = request.get_json()
     raw_data['user_id'] = get_user_id(request.headers.get('Authorization'))
     instance = ActivitySchema().load(raw_data)
