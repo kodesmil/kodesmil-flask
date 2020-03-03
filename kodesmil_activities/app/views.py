@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
-from kodesmil_common.auth import get_user_id, require_auth_and_permissions
+from kodesmil_common.auth import require_auth_and_permissions
 
 from . import db
 from .models import ActivitySchema
@@ -35,7 +35,7 @@ def ping_points(token):
 @marshal_with(ActivitySchema())
 @content.route('/activities', methods=['POST'])
 @require_auth_and_permissions()
-def add_activity():
+def add_activity(*args, **kwargs):
 
     # uncomment this section and have fun ;)
     '''
@@ -48,22 +48,29 @@ def add_activity():
     '''
 
     raw_data = request.get_json()
-    raw_data['user_id'] = get_user_id(request.headers.get('Authorization'))
+    raw_data['user_id'] = kwargs['user_id']
     instance = ActivitySchema().load(raw_data)
-    db.activities.insert_one(instance)
-    ping_points(request.headers.get('Authorization'))
-    return '', 201
+    result = db.activities.insert_one(instance)
+
+    if result.acknowledged:
+        ping_points(request.headers.get('Authorization'))
+        return '', 201
+
+    return '', 500
 
 
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/activities', methods=['GET'])
 @require_auth_and_permissions()
-def get_last_activity():
-    user_id = get_user_id(request.headers.get('Authorization'))
+def get_last_activity(*args, **kwargs):
     schema = ActivitySchema()
-    query = db.activities.find({'user_id': user_id}).sort('_id', -1).limit(1)
+    query = db.activities.find({'user_id': kwargs['user_id']}).sort('_id', -1).limit(1)
     instance = schema.dump(
         query[0]
     )
+
+    if not instance:
+        return '', 404
+
     return jsonify(instance)

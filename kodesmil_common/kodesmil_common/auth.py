@@ -22,6 +22,8 @@ def require_auth_and_permissions(permissions=[]):
                 'Authorization': '{}'.format(request.headers.get('Authorization'))
             }
             response = requests.get(INFO_URL, headers=headers)
+            response_json = response.json()
+            kwargs['user_id'] = response_json['inum']
 
             # check if user is authenticated
             if response.status_code != requests.codes.ok:

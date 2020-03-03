@@ -1,7 +1,6 @@
 from flask import Blueprint, request
-from bson.objectid import ObjectId
 from flask_apispec import marshal_with, doc
-from kodesmil_common.auth import get_user_id, require_auth_and_permissions
+from kodesmil_common.auth import require_auth_and_permissions
 
 from .models import ActivityPointsSchema
 from .app import db
@@ -19,7 +18,7 @@ KODESMIL_ACTIVITY_URL = 'http://172.21.0.2:5001/activities'
 @marshal_with(ActivityPointsSchema())
 @content.route('/points', methods=['POST'])
 @require_auth_and_permissions()
-def add_new_points():
+def add_new_points(*args, **kwargs):
     headers = {
         'Content-Type': 'application/json',
         'Authorization': '{}'.format(request.headers.get('Authorization'))
@@ -30,26 +29,29 @@ def add_new_points():
     )
 
     json_response = response.json()
-    user_id = get_user_id(request.headers.get('Authorization'))
+    user_id = kwargs['user_id']
 
     instance = ActivityPointsSchema().load(
         {
             'user_id': user_id,
             'value': json_response['value'],
-            'activity_id': ObjectId(json_response['_id']),
+            'activity_id': json_response['_id'],
         }
     )
-    db.points.insert_one(instance)
+    response = db.points.insert_one(instance)
 
-    return '', 201
+    if response.acknowledged:
+        return '', 201
+
+    return '', 500
 
 
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivityPointsSchema())
 @content.route('/points', methods=['GET'])
 @require_auth_and_permissions()
-def get_points():
-    user_id = get_user_id(request.headers.get('Authorization'))
+def get_points(*args, **kwargs):
+    user_id = kwargs['user_id']
     schema = ActivityPointsSchema(many=True)
     instances = schema.dump(
         db.points.find({'user_id': user_id})
