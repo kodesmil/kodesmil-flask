@@ -1,24 +1,26 @@
 from marshmallow import Schema, fields
-from marshmallow_enum import EnumField
-from enum import Enum
 
 
-class Source(Enum):
-    google_fit = 1
-    health_kit = 2
-    garmin = 3
+class Source:
+    google_fit = 'google_fit'
+    health_kit = 'health_kit'
+    garmin = 'garmin'
 
 
-class Type(Enum):
-    steps = 1
-    distance = 2
+class Type:
+    activity = 'activity'
+    steps = 'steps'
+    active_minute = 'active_minute'
+    distance = 'distance'
+    heart_minute = 'heart_minute'
 
 
 class ActivitySchema(Schema):
     _id = fields.Str()
     user_id = fields.Str()
-    value = fields.Integer()
+    email = fields.Str()
+    value = fields.Float()
     registered_from = fields.DateTime()
     registered_to = fields.DateTime()
-    source = EnumField(Source)
-    type = EnumField(Type)
+    source = fields.Str()
+    type = fields.Str()
