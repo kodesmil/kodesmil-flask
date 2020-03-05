@@ -4,10 +4,10 @@ from marshmallow import Schema, fields
 # TODO decide which fields are required, and what should be their max size
 
 
-# SERVICE
+# PRODUCTS
 
 
-class ServiceSchema(Schema):
+class ProductSchema(Schema):
     _id = fields.String()
     name = fields.Str()
     description = fields.Str()
@@ -17,29 +17,29 @@ class ServiceSchema(Schema):
     updated_at = fields.DateTime()
 
 
-# SERVICE CATEGORIES
+# PRODUCT CATEGORIES
 
 
-class ServiceCategorySchema(Schema):
+class ProductCategorySchema(Schema):
     _id = fields.Str()
     name = fields.Str()
 
 
-# SERVICE PROVIDERS
+# PRODUCT PROVIDERS
 
 
-class ServiceProviderSchema(Schema):
+class ProductProviderSchema(Schema):
     _id = fields.Str()
     name = fields.Str()
     owner_id = fields.Str()
 
 
-# SERVICE SLOTS
+# PRODUCT SLOTS
 
 
-class ServiceSlotSchema(Schema):
+class ProductSlotSchema(Schema):
     _id = fields.Str()
     duration = fields.Integer()
-    service = fields.Str()
+    product = fields.Str()
     starting_at = fields.DateTime()
     updated_at = fields.DateTime()
