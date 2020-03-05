@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
+from marshmallow import ValidationError
 from kodesmil_common.auth import require_auth_and_permissions, check_ownership
 
 from .models import *
@@ -57,7 +58,12 @@ def get_product(instance_id):
 def add_product():
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
-    instance = ProductSchema().load(request.get_json(raw_data))
+
+    try:
+        instance = ProductSchema().load(request.get_json(raw_data))
+    except ValidationError as err:
+        print(err.messages)
+
     db.products.insert_one(instance)
     return '', 201
 
@@ -73,7 +79,12 @@ def add_product():
 def replace_product(instance_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
-    instance = ProductSchema().load(request.get_json(raw_data))
+
+    try:
+        instance = ProductSchema().load(request.get_json(raw_data))
+    except ValidationError as err:
+        print(err.messages)
+
     result = db.products.replace_one({'_id': ObjectId(instance_id)}, instance)
 
     if not result.matched_count:
@@ -174,7 +185,11 @@ def get_product_provider(instance_id):
 @content.route('/content/product-providers', methods=['POST'])
 @require_auth_and_permissions()
 def add_product_provider():
-    instance = ProductProviderSchema().load(request.get_json())
+    try:
+        instance = ProductProviderSchema().load(request.get_json())
+    except ValidationError as err:
+        print(err.messages)
+
     db.product_providers.insert_one(instance)
     return '', 204
 
@@ -186,12 +201,22 @@ def add_product_provider():
 @check_ownership('/content/product-providers', 'owner_id')
 def replace_product_provider(instance_id):
     raw_data = request.get_json()
-    instance = ProductProviderSchema().load(request.get_json(raw_data))
+
+    try:
+        instance = ProductProviderSchema().load(request.get_json(raw_data))
+    except ValidationError as err:
+        print(err.messages)
+
     result = db.product_providers.replace_one({'_id': ObjectId(instance_id)}, instance)
 
     if not result.matched_count:
         raw_data['_id'] = ObjectId(instance_id)
-        instance = ProductProviderSchema().load(request.get_json(raw_data))
+
+        try:
+            instance = ProductProviderSchema().load(request.get_json(raw_data))
+        except ValidationError as err:
+            print(err.messages)
+
         db.product_providers.insert_one(instance)
         return '', 201
 
@@ -246,7 +271,12 @@ def get_product_slot(instance_id):
 def add_product_slot():
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
-    instance = ProductSlotSchema().load(raw_data)
+
+    try:
+        instance = ProductSlotSchema().load(raw_data)
+    except ValidationError as err:
+        print(err.messages)
+
     db.product_slots.insert_one(instance)
     return '', 204
 
@@ -260,12 +290,22 @@ def add_product_slot():
 # @check_ownership('/content/product-providers', 'owner_id')
 def replace_product_slot(instance_id):
     raw_data = request.get_json()
-    instance = ProductSlotSchema().load(request.get_json(raw_data))
+
+    try:
+        instance = ProductSlotSchema().load(request.get_json(raw_data))
+    except ValidationError as err:
+        print(err.messages)
+
     result = db.product_slots.replace_one({'_id': ObjectId(instance_id)}, instance)
 
     if not result.matched_count:
         raw_data['_id'] = ObjectId(instance_id)
-        instance = ProductSlotSchema().load(request.get_json(raw_data))
+
+        try:
+            instance = ProductSlotSchema().load(request.get_json(raw_data))
+        except ValidationError as err:
+            print(err.messages)
+
         db.product_slots.insert_one(instance)
         return '', 201
 
