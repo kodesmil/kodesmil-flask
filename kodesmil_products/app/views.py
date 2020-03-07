@@ -8,7 +8,7 @@ from kodesmil_common.auth import require_auth_and_permissions, check_ownership
 from .models import *
 from .app import db
 
-content = Blueprint('content', __name__)
+products = Blueprint('products', __name__)
 
 product_id_fields = [
     '_id',
@@ -23,7 +23,7 @@ product_id_fields = [
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
-@content.route('/content/products', methods=['GET'])
+@products.route('/products/products', methods=['GET'])
 @require_auth_and_permissions()
 def get_products():
     schema = ProductSchema(many=True)
@@ -37,9 +37,9 @@ def get_products():
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
-@content.route('/content/products/<string:instance_id>', methods=['GET'])
+@products.route('/products/products/<string:instance_id>', methods=['GET'])
 @require_auth_and_permissions()
-def get_product(instance_id):
+def get_product(user_id, instance_id):
     schema = ProductSchema()
 
     instance = schema.dump(
@@ -53,45 +53,49 @@ def get_product(instance_id):
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
-@content.route('/content/products', methods=['POST'])
+@products.route('/products/products', methods=['POST'])
 @require_auth_and_permissions()
-def add_product():
+def add_product(user_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
 
     try:
         instance = ProductSchema().load(request.get_json(raw_data))
+        result = db.products.insert_one(instance)
+        return str(result.inserted_id), 201
     except ValidationError as err:
-        print(err.messages)
-
-    db.products.insert_one(instance)
-    return '', 201
+        return err.messages, 400
 
 
 # replaces an instance with recieved data
 # but, only if user is owner of this instance
+#@TODO test it well!
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
-@content.route('/content/products/<string:instance_id>', methods=['PUT'])
+@products.route('/products/products/<string:instance_id>', methods=['PUT'])
 @require_auth_and_permissions()
-@check_ownership('/content/products', 'provider')
-def replace_product(instance_id):
+@check_ownership('/products/products', 'provider')
+def replace_product(user_id, instance_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
 
     try:
         instance = ProductSchema().load(request.get_json(raw_data))
     except ValidationError as err:
-        print(err.messages)
+        return err.messages, 400
+    else:
+        result = db.products.replace_one({'_id': ObjectId(instance_id)}, instance)
 
-    result = db.products.replace_one({'_id': ObjectId(instance_id)}, instance)
+        if not result.matched_count:
+            raw_data['_id'] = ObjectId(instance_id)
+            try:
+                instance = ProductSchema().load(request.get_json(raw_data))
+                response = db.products.insert_one(instance)
+                return str(response.inserted_id), 201
+            except ValidationError as err:
+                return err.messages, 400
 
-    if not result.matched_count:
-        raw_data['_id'] = ObjectId(instance_id)
-        instance = ProductSchema().load(request.get_json(raw_data))
-        db.products.insert_one(instance)
-        return '', 201
 
     return '', 204
 
@@ -100,10 +104,10 @@ def replace_product(instance_id):
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
-@content.route('/content/products/<string:instance_id>', methods=['DELETE'])
+@products.route('/products/products/<string:instance_id>', methods=['DELETE'])
 @require_auth_and_permissions()
-@check_ownership('/content/products', 'provider')
-def remove_product(instance_id):
+@check_ownership('/products/products', 'provider')
+def remove_product(user_id, instance_id):
     result = db.products.delete_one({
         '_id': ObjectId(instance_id)
     })
@@ -116,9 +120,9 @@ def remove_product(instance_id):
 
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
-@content.route('/content/products/filter')
+@products.route('/products/products/filter')
 @require_auth_and_permissions()
-def filter_products():
+def filter_products(user_id):
     schema = ProductSchema(many=True)
 
     if not request.json:
@@ -144,9 +148,9 @@ def filter_products():
 
 @doc(tags=['Product Categories'], description='')
 @marshal_with(ProductCategorySchema(many=True))
-@content.route('/content/product-categories', methods=['GET'])
+@products.route('/products/product-categories', methods=['GET'])
 @require_auth_and_permissions()
-def get_product_categories():
+def get_product_categories(user_id):
     schema = ProductCategorySchema(many=True)
     instances = schema.dump(
         db.product_categories.find()
@@ -158,9 +162,9 @@ def get_product_categories():
 
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema(many=True))
-@content.route('/content/product-providers', methods=['GET'])
+@products.route('/products/product-providers', methods=['GET'])
 @require_auth_and_permissions()
-def get_product_providers():
+def get_product_providers(user_id):
     schema = ProductProviderSchema(many=True)
     instances = schema.dump(
         db.product_providers.find()
@@ -170,9 +174,9 @@ def get_product_providers():
 
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
-@content.route('/content/product-providers/<string:instance_id>', methods=['GET'])
+@products.route('/products/product-providers/<string:instance_id>', methods=['GET'])
 @require_auth_and_permissions()
-def get_product_provider(instance_id):
+def get_product_provider(user_id, instance_id):
     schema = ProductProviderSchema()
     instance = schema.dump(
         db.product_providers.find_one({'_id': ObjectId(instance_id)})
@@ -182,53 +186,50 @@ def get_product_provider(instance_id):
 
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
-@content.route('/content/product-providers', methods=['POST'])
+@products.route('/products/product-providers', methods=['POST'])
 @require_auth_and_permissions()
-def add_product_provider():
+def add_product_provider(user_id):
+
     try:
         instance = ProductProviderSchema().load(request.get_json())
+        response = db.product_providers.insert_one(instance)
+        return str(response.inserted_id), 201
     except ValidationError as err:
-        print(err.messages)
+        return err.messages, 400
 
-    db.product_providers.insert_one(instance)
-    return '', 204
-
+#@TODO test it
 
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
-@content.route('/content/product-providers/<string:instance_id>', methods=['PUT'])
+@products.route('/products/product-providers/<string:instance_id>', methods=['PUT'])
 @require_auth_and_permissions()
-@check_ownership('/content/product-providers', 'owner_id')
-def replace_product_provider(instance_id):
+@check_ownership('/products/product-providers', 'owner_id')
+def replace_product_provider(user_id, instance_id):
     raw_data = request.get_json()
 
     try:
         instance = ProductProviderSchema().load(request.get_json(raw_data))
     except ValidationError as err:
-        print(err.messages)
-
-    result = db.product_providers.replace_one({'_id': ObjectId(instance_id)}, instance)
-
-    if not result.matched_count:
-        raw_data['_id'] = ObjectId(instance_id)
-
-        try:
-            instance = ProductProviderSchema().load(request.get_json(raw_data))
-        except ValidationError as err:
-            print(err.messages)
-
-        db.product_providers.insert_one(instance)
-        return '', 201
-
+        return err.messages, 400
+    else:
+        result = db.product_providers.replace_one({'_id': ObjectId(instance_id)}, instance)
+        if not result.matched_count:
+            raw_data['_id'] = ObjectId(instance_id)
+            try:
+                instance = ProductProviderSchema().load(request.get_json(raw_data))
+            except ValidationError as err:
+                return err.messages, 400
+            response = db.product_providers.insert_one(instance)
+            return str(response.inserted_id), 201
     return '', 204
 
 
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
-@content.route('/content/product-providers/<string:instance_id>', methods=['DELETE'])
+@products.route('/products/product-providers/<string:instance_id>', methods=['DELETE'])
 @require_auth_and_permissions()
-@check_ownership('/content/product-providers', 'owner_id')
-def remove_product_provider(instance_id):
+@check_ownership('/products/product-providers', 'owner_id')
+def remove_product_provider(user_id, instance_id):
     result = db.product_providers.delete_one({
         '_id': ObjectId(instance_id)
     })
@@ -242,9 +243,9 @@ def remove_product_provider(instance_id):
 
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema(many=True))
-@content.route('/content/product-slots', methods=['GET'])
+@products.route('/products/product-slots', methods=['GET'])
 @require_auth_and_permissions()
-def get_product_slots():
+def get_product_slots(user_id):
     schema = ProductSlotSchema(many=True)
     instances = schema.dump(
         db.product_slots.find()
@@ -254,9 +255,9 @@ def get_product_slots():
 
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
-@content.route('/content/product-slots/<string:instance_id>', methods=['GET'])
+@products.route('/products/product-slots/<string:instance_id>', methods=['GET'])
 @require_auth_and_permissions()
-def get_product_slot(instance_id):
+def get_product_slot(user_id, instance_id):
     schema = ProductSlotSchema()
     instance = schema.dump(
         db.product_slots.find_one({'_id': ObjectId(instance_id)})
@@ -266,58 +267,56 @@ def get_product_slot(instance_id):
 
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
-@content.route('/content/product-slots', methods=['POST'])
+@products.route('/products/product-slots', methods=['POST'])
 @require_auth_and_permissions()
-def add_product_slot():
+def add_product_slot(user_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
 
     try:
         instance = ProductSlotSchema().load(raw_data)
+        result =db.product_slots.insert_one(instance)
+        return str(result.inserted_id), 201
     except ValidationError as err:
-        print(err.messages)
-
-    db.product_slots.insert_one(instance)
-    return '', 204
+        return err.messages, 400
 
 
 # TODO both PUT and DELETE methods need another way to check ownership
 
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
-@content.route('/content/product-slots/<string:instance_id>', methods=['PUT'])
+@products.route('/products/product-slots/<string:instance_id>', methods=['PUT'])
 @require_auth_and_permissions()
-# @check_ownership('/content/product-providers', 'owner_id')
-def replace_product_slot(instance_id):
+# @check_ownership('/products/product-providers', 'owner_id')
+def replace_product_slot(user_id, instance_id):
     raw_data = request.get_json()
 
     try:
         instance = ProductSlotSchema().load(request.get_json(raw_data))
     except ValidationError as err:
-        print(err.messages)
+        return err.messages, 400
 
-    result = db.product_slots.replace_one({'_id': ObjectId(instance_id)}, instance)
+    else:
+        result = db.product_slots.replace_one({'_id': ObjectId(instance_id)}, instance)
 
-    if not result.matched_count:
-        raw_data['_id'] = ObjectId(instance_id)
+        if not result.matched_count:
+            raw_data['_id'] = ObjectId(instance_id)
 
-        try:
-            instance = ProductSlotSchema().load(request.get_json(raw_data))
-        except ValidationError as err:
-            print(err.messages)
+            try:
+                instance = ProductSlotSchema().load(request.get_json(raw_data))
+            except ValidationError as err:
+                return err.messages, 400
 
-        db.product_slots.insert_one(instance)
-        return '', 201
-
-    return '', 204
+            result = db.product_slots.insert_one(instance)
+            return result.inserted_id, 201
 
 
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductProviderSchema())
-@content.route('/content/product-slots/<string:instance_id>', methods=['DELETE'])
+@products.route('/products/product-slots/<string:instance_id>', methods=['DELETE'])
 @require_auth_and_permissions()
-# @check_ownership('/content/product-providers', 'owner_id')
-def remove_product_slot(instance_id):
+# @check_ownership('/products/product-providers', 'owner_id')
+def remove_product_slot(user_id, instance_id):
     result = db.product_slots.delete_one({
         '_id': ObjectId(instance_id)
     })
