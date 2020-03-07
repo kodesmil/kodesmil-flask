@@ -1,10 +1,14 @@
+import datetime as dt
+
+import bson
 from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
 from kodesmil_common.auth import require_auth_and_permissions
+from marshmallow import fields, ValidationError, missing
 
 from . import db
 from .fit.fit import get_heart_minutes, get_distances
-from .models import ActivitySchema
+from .models import ActivitySchema, UserSchema
 
 import requests
 
@@ -63,17 +67,37 @@ def get_last_activity(*args, **kwargs):
 
 @doc(tags=['GoogleFitActivities'], description='')
 @marshal_with(ActivitySchema())
-@content.route('/google-fit-activities', methods=['POST'])
+@content.route('/sync/google-fit', methods=['POST'])
 # @require_auth_and_permissions()
 def add_google_fit_activity(*args, **kwargs):
     request_data = request.get_json()
     credentials = AccessTokenCredentials(request_data['access_token'], 'Flask/1.0')
-    email = request_data['email']
-    data = get_heart_minutes(credentials, email)
-    data.extend(get_distances(credentials, email))
+    user = get_user(request_data)
+    data = get_heart_minutes(credentials, user)
+    data.extend(get_distances(credentials, user))
     activities = ActivitySchema(many=True).load(data)
     result = db.activities.insert_many(activities)
     if result.acknowledged:
         # ping_points(request.headers.get('Authorization'))
         return '', 201
     return '', 200
+
+
+def get_user(request_data):
+    email = request_data['email']
+    match = {'email': email}
+    user = db.users.find_one(match)
+    user_schema = UserSchema().load({
+        'email': email,
+        'last_synced_at': dt.datetime.now().isoformat(),
+    })
+    if not user:
+        db.users.insert_one(user_schema)
+        return db.users.find_one(match)
+    else:
+        db.users.replace_one(
+            match,
+            user_schema,
+            True,
+        )
+        return db.users.find_one(match)

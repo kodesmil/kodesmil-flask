@@ -7,7 +7,7 @@ from .model.data_type import DataType
 from ..models import Source
 
 
-def get_data(credentials, email, data_type):
+def get_data(credentials, user, data_type):
     output = []
     today = date.today()
     start_date = today - relativedelta(days=60, hour=00, minute=00, second=00)
@@ -22,10 +22,9 @@ def get_data(credentials, email, data_type):
                     start_time = datetime.fromtimestamp(int(int(point["startTimeNanos"]) / 1000000000))
                     end_time = datetime.fromtimestamp(int(int(point["endTimeNanos"]) / 1000000000))
                     output.append({
+                        '_user_id': user['_id'],
                         'registered_from': start_time.isoformat(),
                         'registered_to': end_time.isoformat(),
-                        # 'user_id': user_id,
-                        'email': email,
                         'value': point['value'][0]['fpVal'],
                         'source': Source.google_fit,
                         'type': data_type.model_type,
@@ -33,16 +32,16 @@ def get_data(credentials, email, data_type):
     return output
 
 
-def get_heart_minutes(credentials, user_id):
-    return get_data(credentials, user_id, DataType.HeartMinute)
+def get_heart_minutes(credentials, user):
+    return get_data(credentials, user, DataType.HeartMinute)
 
 
-def get_activity_minutes(credentials, user_id):
-    return get_data(credentials, user_id, DataType.ActiveMinute)
+def get_activity_minutes(credentials, user):
+    return get_data(credentials, user, DataType.ActiveMinute)
 
 
-def get_distances(credentials, user_id):
-    return get_data(credentials, user_id, DataType.Distance)
+def get_distances(credentials, user):
+    return get_data(credentials, user, DataType.Distance)
 
 
 def search(credentials, data_type_name, data_source_id, start, end, bucket_by_time=86400000):
