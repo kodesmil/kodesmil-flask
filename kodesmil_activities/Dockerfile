@@ -22,4 +22,4 @@ USER www
 
 EXPOSE 5000
 
-CMD [ "gunicorn", "-w", "1", "--bind", "0.0.0.0:5000", "app.wsgi"]
+CMD [ "gunicorn", "-w", "1", "--bind", "0.0.0.0:5000", "app.wsgi", "--reload", "--timeout", "360"]

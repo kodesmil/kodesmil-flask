@@ -9,5 +9,6 @@ spec:
   - name: app
     port: 5000
     targetPort: 5000
+  type: NodePort
   selector:
     run: kodesmil-activities

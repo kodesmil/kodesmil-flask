@@ -1,5 +1,23 @@
 #!/bin/sh
 
+# Eval args
+
+skip_build='false'
+
+for i in "$@"
+do
+case $i in
+    -s=*|--skip-build=*)
+    skip_build="${i#*=}"
+    shift
+    ;;
+    *)
+    ;;
+esac
+done
+
+# Start
+
 products='activities health_survey'
 
 kubectl apply -f deployment/secret.yaml
@@ -15,20 +33,24 @@ do
   tag=$image:$timestamp
   latest=$image:latest
 
-  # Build image
-  docker build -t $latest -t $tag $product_path
+  if ! "$skip_build"
+  then
+    # Build image
+    docker build -t "$latest" -t "$tag" "$product_path"
 
-  # Push to dockerhub
-  docker login
-  docker push $latest
+    # Push to dockerhub
+    docker login
+    docker push "$latest"
 
-  # Remove dangling images
-  docker system prune -f
+    # Remove dangling images
+    docker system prune -f
+  fi
 
   # Deploy
-  kubectl delete deployment.apps/kodesmil-${product/_/-}
-  kubectl apply -f $deployment_path/service.yaml
-  kubectl apply -f $deployment_path/deployment.yaml
+  kubectl delete deployment.apps/kodesmil-"${product/_/-}"
+  kubectl apply -f "$deployment_path"/service.yaml
+  kubectl apply -f "$deployment_path"/deployment.yaml
+
 done
 
 kubectl apply -f deployment/ingress.yaml
