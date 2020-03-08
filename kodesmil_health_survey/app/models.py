@@ -31,5 +31,5 @@ class UserSchema(Schema):
 class SurveyRankSchema(Schema):
     _id = ObjectId()
     _user_id = ObjectId()
-    value = fields.Integer()
+    value = fields.Float()
     type = fields.Str()
