@@ -29,7 +29,7 @@ spec:
             - name: APP_PORT
               value: "5000"
             - name: MONGODB_DB_HEALTH_SURVEY
-              value: kodesmil-health-survey
+              value: kodesmil_health_survey
             - name: MONGODB_HOSTNAME
               valueFrom:
                 secretKeyRef:
