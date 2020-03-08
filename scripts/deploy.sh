@@ -28,6 +28,7 @@ do
   # Deploy
   kubectl delete deployment.apps/kodesmil-${product/_/-}
   kubectl apply -f $deployment_path/service.yaml
-  kubectl apply -f $deployment_path/load-balancer.yaml
   kubectl apply -f $deployment_path/deployment.yaml
 done
+
+kubectl apply -f deployment/ingress.yaml

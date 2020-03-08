@@ -132,7 +132,11 @@ dmypy.json
 */docker-compose.yml
 
 .DS_Store
-.idea/
+
+**/.idea/**
+!**/.idea/runConfigurations/
+!**/.idea/runConfigurations/*
+
 flask_monitoringdashboard.db
 
 /deployment/secret.yaml

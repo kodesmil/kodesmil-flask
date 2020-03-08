@@ -6,9 +6,8 @@ metadata:
   name: kodesmil-health-survey
 spec:
   ports:
-  - name: "5000"
+  - name: app
     port: 5000
     targetPort: 5000
   selector:
     run: kodesmil-health-survey
-  type: NodePort

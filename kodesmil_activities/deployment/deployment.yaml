@@ -47,3 +47,8 @@ spec:
                   key: MONGODB_USERNAME
           image: kodesmil/kodesmil_activities:latest
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "0.2"
+            requests:
+              cpu: "0.2"

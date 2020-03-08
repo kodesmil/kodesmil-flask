@@ -18,6 +18,8 @@ def add_rank(*args, **kwargs):
     request_data = request.get_json()
     user = get_user(request_data)
     request_data['_user_id'] = user['_id']
+    # to remove
+    request_data.pop('email', None)
     result = db.ranks.insert_one(SurveyRankSchema().load(request_data))
     if result.acknowledged:
         return '', 201
