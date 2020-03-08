@@ -19,13 +19,6 @@ spec:
     spec:
       containers:
         - name: kodesmil-activities
-          resources:
-            limits:
-              cpu: "0.50"
-              memory: "1.9Gi"
-            requests:
-              cpu: "0.15"
-              memory: "1.0Gi"
           ports:
             - containerPort: 5000
           env:
@@ -35,13 +28,22 @@ spec:
               value: prod
             - name: APP_PORT
               value: "5000"
-            - name: MONGODB_DATABASE
+            - name: MONGODB_DB_ACTIVITIES
               value: kodesmil_activities
             - name: MONGODB_HOSTNAME
-              value: motim0-abanq.mongodb.net
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_HOSTNAME
             - name: MONGODB_PASSWORD
-              value: kodesmil
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_PASSWORD
             - name: MONGODB_USERNAME
-              value: kodesmil
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_USERNAME
           image: kodesmil/kodesmil_activities:latest
           imagePullPolicy: Always

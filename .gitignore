@@ -134,3 +134,5 @@ dmypy.json
 .DS_Store
 .idea/
 flask_monitoringdashboard.db
+
+/deployment/secret.yaml

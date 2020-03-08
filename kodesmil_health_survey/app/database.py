@@ -10,7 +10,7 @@ class Database:
             os.environ['MONGODB_USERNAME'],
             os.environ['MONGODB_PASSWORD'],
             os.environ['MONGODB_HOSTNAME'],
-            os.environ['MONGODB_DB_ACTIVITIES'],
+            os.environ['MONGODB_DB_HEALTH_SURVEY'],
         )
         mongo = PyMongo(app)
         self.db = mongo.db

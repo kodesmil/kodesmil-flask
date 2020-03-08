@@ -16,18 +16,9 @@ class ObjectId(fields.Field):
         return str(value)
 
 
-class Source:
-    google_fit = 'google_fit'
-    health_kit = 'health_kit'
-    garmin = 'garmin'
-
-
-class Type:
-    activity = 'activity'
-    steps = 'steps'
-    active_minute = 'active_minute'
-    distance = 'distance'
-    heart_minute = 'heart_minute'
+class SurveyType:
+    mood = 'mood'
+    health = 'health'
 
 
 class UserSchema(Schema):
@@ -37,11 +28,8 @@ class UserSchema(Schema):
     last_synced_at = fields.DateTime()
 
 
-class ActivitySchema(Schema):
+class SurveyRankSchema(Schema):
     _id = ObjectId()
     _user_id = ObjectId()
-    value = fields.Float()
-    registered_from = fields.DateTime()
-    registered_to = fields.DateTime()
-    source = fields.Str()
+    value = fields.Decimal()
     type = fields.Str()
