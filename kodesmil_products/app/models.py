@@ -15,7 +15,6 @@ class ProductSchema(Schema):
     )
     price = fields.Float(
         required = True,
-        validate = validate.Length(min=1),
     )
     description = fields.Str()
     category = fields.Str(required = True)
