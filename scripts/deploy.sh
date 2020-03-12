@@ -24,6 +24,7 @@ kubectl apply -f deployment/secret.yaml
 
 for product in $products
 do
+  echo "Build image: $product"
   image="kodesmil/kodesmil_$product"
   product_path="kodesmil_$product"
   deployment_path="$product_path/deployment"
