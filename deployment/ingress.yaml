@@ -40,12 +40,12 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: kodesmil-health-survey
+          serviceName: kodesmil-locations
           servicePort: 5000
   - host: locations.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: kodesmil-health-survey
+          serviceName: kodesmil-locations
           servicePort: 5000
