@@ -7,6 +7,6 @@ class LocationSchema(Schema):
     _id = ObjectId()
     created_at = fields.DateTime()
     user_id = ObjectId()
-    lan = fields.Float()
+    lat = fields.Float()
     lon = fields.Float()
     accuracy = fields.Float()
