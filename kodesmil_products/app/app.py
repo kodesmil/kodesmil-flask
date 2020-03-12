@@ -11,7 +11,7 @@ db = database.Database(app).db
 
 from . import views
 
-app.register_blueprint(views.content)
+app.register_blueprint(views.products)
 
 # from . import docs
 

@@ -26,43 +26,43 @@ class Documentation:
         self.docs.register(
             views.get_services,
             endpoint='get_services',
-            blueprint='content',
+            blueprint='products',
         )
         self.docs.register(
             views.add_service,
             endpoint='add_service',
-            blueprint='content',
+            blueprint='products',
         )
         self.docs.register(
             views.filter_services,
             endpoint='filter_services',
-            blueprint='content',
+            blueprint='products',
         )
 
         self.docs.register(
             views.get_service_categories,
             endpoint='get_service_categories',
-            blueprint='content',
+            blueprint='products',
         )
 
         self.docs.register(
             views.get_service_providers,
             endpoint='get_service_providers',
-            blueprint='content',
+            blueprint='products',
         )
         self.docs.register(
             views.add_service_provider,
             endpoint='add_service_provider',
-            blueprint='content',
+            blueprint='products',
         )
 
         self.docs.register(
             views.get_service_slots,
             endpoint='get_service_slots',
-            blueprint='content',
+            blueprint='products',
         )
         self.docs.register(
             views.add_service_slot,
             endpoint='add_service_slot',
-            blueprint='content',
+            blueprint='products',
         )
