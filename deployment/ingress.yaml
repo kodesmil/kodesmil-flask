@@ -21,14 +21,28 @@ spec:
         backend:
           serviceName: kodesmil-activities
           servicePort: 5000
-  - host: www.health-survey.api.kodesmil.com
+  - host: www.survey.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-health-survey
           servicePort: 5000
-  - host: health-survey.api.kodesmil.com
+  - host: survey.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-health-survey
+          servicePort: 5000
+  - host: www.locations.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-health-survey
+          servicePort: 5000
+  - host: locations.api.kodesmil.com
     http:
       paths:
       - path: /

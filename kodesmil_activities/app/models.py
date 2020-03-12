@@ -1,19 +1,6 @@
-import bson
-from marshmallow import Schema, fields, missing, ValidationError
+from marshmallow import Schema, fields
 
-
-class ObjectId(fields.Field):
-
-    def _deserialize(self, value, attr, data, **kwargs):
-        try:
-            return bson.ObjectId(value)
-        except:
-            raise ValidationError('invalid ObjectId `%s`' % value)
-
-    def _serialize(self, value, attr, obj, **kwargs):
-        if value is None:
-            return missing
-        return str(value)
+from kodesmil_common.object_id import ObjectId
 
 
 class Source:
@@ -28,13 +15,6 @@ class Type:
     active_minute = 'active_minute'
     distance = 'distance'
     heart_minute = 'heart_minute'
-
-
-class UserSchema(Schema):
-    _id = ObjectId()
-    auth_user_id = fields.Str()
-    email = fields.Str()
-    last_synced_at = fields.DateTime()
 
 
 class ActivitySchema(Schema):

@@ -18,7 +18,7 @@ done
 
 # Start
 
-products='activities health_survey'
+products='activities survey locations'
 
 kubectl apply -f deployment/secret.yaml
 

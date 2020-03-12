@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: kodesmil-locatiions
+  name: kodesmil-locatiions
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kodesmil-locatiions
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: kodesmil-locatiions
+    spec:
+      containers:
+        - name: kodesmil-locatiions
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_DEBUG
+              value: "True"
+            - name: APP_ENV
+              value: prod
+            - name: APP_PORT
+              value: "5000"
+            - name: MONGODB_DB_locatiions
+              value: kodesmil_locatiions
+            - name: MONGODB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_HOSTNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_PASSWORD
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_USERNAME
+          image: kodesmil/kodesmil_locatiions:latest
+          imagePullPolicy: Always

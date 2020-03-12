@@ -1,14 +1,11 @@
-import datetime as dt
-
-import bson
 from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
 from kodesmil_common.auth import require_auth_and_permissions
-from marshmallow import fields, ValidationError, missing
 
+from kodesmil_common.user_schema import get_user
 from . import db
 from .fit.fit import get_heart_minutes, get_distances
-from .models import ActivitySchema, UserSchema
+from .models import ActivitySchema
 
 import requests
 
@@ -72,7 +69,7 @@ def get_last_activity(*args, **kwargs):
 def add_google_fit_activity(*args, **kwargs):
     request_data = request.get_json()
     credentials = AccessTokenCredentials(request_data['access_token'], 'Flask/1.0')
-    user = get_user(request_data)
+    user = get_user(db, request_data)
     data = get_heart_minutes(credentials, user)
     data.extend(get_distances(credentials, user))
     activities = ActivitySchema(many=True).load(data)
@@ -81,23 +78,3 @@ def add_google_fit_activity(*args, **kwargs):
         # ping_points(request.headers.get('Authorization'))
         return '', 201
     return '', 200
-
-
-def get_user(request_data):
-    email = request_data['email']
-    match = {'email': email}
-    user = db.users.find_one(match)
-    user_schema = UserSchema().load({
-        'email': email,
-        'last_synced_at': dt.datetime.now().isoformat(),
-    })
-    if not user:
-        db.users.insert_one(user_schema)
-        return db.users.find_one(match)
-    else:
-        db.users.replace_one(
-            match,
-            user_schema,
-            True,
-        )
-        return db.users.find_one(match)

@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: kodesmil-health-survey
-  name: kodesmil-health-survey
+    run: kodesmil-survey
+  name: kodesmil-survey
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: kodesmil-health-survey
+      run: kodesmil-survey
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        run: kodesmil-health-survey
+        run: kodesmil-survey
     spec:
       containers:
-        - name: kodesmil-health-survey
+        - name: kodesmil-survey
           ports:
             - containerPort: 5000
           env:
@@ -28,8 +28,8 @@ spec:
               value: prod
             - name: APP_PORT
               value: "5000"
-            - name: MONGODB_DB_HEALTH_SURVEY
-              value: kodesmil_health_survey
+            - name: MONGODB_DB_SURVEY
+              value: kodesmil_survey
             - name: MONGODB_HOSTNAME
               valueFrom:
                 secretKeyRef:
@@ -45,5 +45,5 @@ spec:
                 secretKeyRef:
                   name: kodesmil-secret
                   key: MONGODB_USERNAME
-          image: kodesmil/kodesmil_health_survey:latest
+          image: kodesmil/kodesmil_survey:latest
           imagePullPolicy: Always
