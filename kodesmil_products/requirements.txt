@@ -11,3 +11,4 @@ flask_apispec
 Flask-PyMongo
 requests
 kodesmil_common
+dnspython
