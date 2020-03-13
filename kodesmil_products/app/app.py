@@ -1,6 +1,6 @@
 import os
-from flask import Flask
-
+from flask import Flask, jsonify
+from kodesmil_common import AuthError
 # import flask_monitoringdashboard as dashboard
 
 app = Flask(__name__)
@@ -18,6 +18,13 @@ app.register_blueprint(views.products)
 # docs = docs.Documentation(app)
 
 # dashboard.bind(app)
+
+
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
 
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)

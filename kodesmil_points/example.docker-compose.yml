@@ -17,6 +17,8 @@ services:
       MONGODB_USERNAME: # DB USERNAME
       MONGODB_PASSWORD: # PASSWORD
       MONGODB_HOSTNAME: # DB HOSTNAME
+      AUTH0_DOMAIN: # AUTH0 URL
+      API_IDENTIFIER: # AUTH0 API IDENTIFIER
     volumes:
       - .:/var/www
 
@@ -38,7 +40,7 @@ services:
     volumes:
       - nginxdata:/var/log/nginx
     depends_on:
-      - flask
+      - kodesmil_points_flask
 
 volumes:
   appdata:

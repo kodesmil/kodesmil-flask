@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 import datetime as dt
 from flask_apispec import marshal_with, doc
 from marshmallow import ValidationError
-from kodesmil_common.auth import require_auth_and_permissions, check_ownership
+from kodesmil_common import requires_auth
 
 from .models import *
 from .app import db
@@ -24,7 +24,7 @@ product_id_fields = [
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
 @products.route('/products/products', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_products():
     schema = ProductSchema(many=True)
     instances = schema.dump(
@@ -38,7 +38,7 @@ def get_products():
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
 @products.route('/products/products/<string:instance_id>', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product(user_id, instance_id):
     schema = ProductSchema()
 
@@ -54,7 +54,7 @@ def get_product(user_id, instance_id):
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
 @products.route('/products/products', methods=['POST'])
-@require_auth_and_permissions()
+@requires_auth
 def add_product(user_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
@@ -74,8 +74,8 @@ def add_product(user_id):
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
 @products.route('/products/products/<string:instance_id>', methods=['PUT'])
-@require_auth_and_permissions()
-@check_ownership('/products/products', 'provider')
+@requires_auth
+#@check_ownership('/products/products', 'provider')
 def replace_product(user_id, instance_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
@@ -105,8 +105,8 @@ def replace_product(user_id, instance_id):
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema())
 @products.route('/products/products/<string:instance_id>', methods=['DELETE'])
-@require_auth_and_permissions()
-@check_ownership('/products/products', 'provider')
+@requires_auth
+#@check_ownership('/products/products', 'provider')
 def remove_product(user_id, instance_id):
     result = db.products.delete_one({
         '_id': ObjectId(instance_id)
@@ -121,7 +121,7 @@ def remove_product(user_id, instance_id):
 @doc(tags=['Products'], description='')
 @marshal_with(ProductSchema(many=True))
 @products.route('/products/products/filter')
-@require_auth_and_permissions()
+@requires_auth
 def filter_products(user_id):
     schema = ProductSchema(many=True)
 
@@ -149,7 +149,7 @@ def filter_products(user_id):
 @doc(tags=['Product Categories'], description='')
 @marshal_with(ProductCategorySchema(many=True))
 @products.route('/products/product-categories', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product_categories(user_id):
     schema = ProductCategorySchema(many=True)
     instances = schema.dump(
@@ -163,7 +163,7 @@ def get_product_categories(user_id):
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema(many=True))
 @products.route('/products/product-providers', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product_providers(user_id):
     schema = ProductProviderSchema(many=True)
     instances = schema.dump(
@@ -175,7 +175,7 @@ def get_product_providers(user_id):
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
 @products.route('/products/product-providers/<string:instance_id>', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product_provider(user_id, instance_id):
     schema = ProductProviderSchema()
     instance = schema.dump(
@@ -187,7 +187,7 @@ def get_product_provider(user_id, instance_id):
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
 @products.route('/products/product-providers', methods=['POST'])
-@require_auth_and_permissions()
+@requires_auth
 def add_product_provider(user_id):
 
     try:
@@ -202,8 +202,8 @@ def add_product_provider(user_id):
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
 @products.route('/products/product-providers/<string:instance_id>', methods=['PUT'])
-@require_auth_and_permissions()
-@check_ownership('/products/product-providers', 'owner_id')
+@requires_auth
+#@check_ownership('/products/product-providers', 'owner_id')
 def replace_product_provider(user_id, instance_id):
     raw_data = request.get_json()
 
@@ -227,8 +227,8 @@ def replace_product_provider(user_id, instance_id):
 @doc(tags=['Product Providers'], description='')
 @marshal_with(ProductProviderSchema())
 @products.route('/products/product-providers/<string:instance_id>', methods=['DELETE'])
-@require_auth_and_permissions()
-@check_ownership('/products/product-providers', 'owner_id')
+@requires_auth
+#@check_ownership('/products/product-providers', 'owner_id')
 def remove_product_provider(user_id, instance_id):
     result = db.product_providers.delete_one({
         '_id': ObjectId(instance_id)
@@ -244,7 +244,7 @@ def remove_product_provider(user_id, instance_id):
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema(many=True))
 @products.route('/products/product-slots', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product_slots(user_id):
     schema = ProductSlotSchema(many=True)
     instances = schema.dump(
@@ -256,7 +256,7 @@ def get_product_slots(user_id):
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
 @products.route('/products/product-slots/<string:instance_id>', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_product_slot(user_id, instance_id):
     schema = ProductSlotSchema()
     instance = schema.dump(
@@ -268,7 +268,7 @@ def get_product_slot(user_id, instance_id):
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
 @products.route('/products/product-slots', methods=['POST'])
-@require_auth_and_permissions()
+@requires_auth
 def add_product_slot(user_id):
     raw_data = request.get_json()
     raw_data['updated_at'] = str(dt.datetime.now(dt.timezone.utc).isoformat())
@@ -286,7 +286,7 @@ def add_product_slot(user_id):
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductSlotSchema())
 @products.route('/products/product-slots/<string:instance_id>', methods=['PUT'])
-@require_auth_and_permissions()
+@requires_auth
 # @check_ownership('/products/product-providers', 'owner_id')
 def replace_product_slot(user_id, instance_id):
     raw_data = request.get_json()
@@ -314,7 +314,7 @@ def replace_product_slot(user_id, instance_id):
 @doc(tags=['Product Slots'], description='')
 @marshal_with(ProductProviderSchema())
 @products.route('/products/product-slots/<string:instance_id>', methods=['DELETE'])
-@require_auth_and_permissions()
+@requires_auth
 # @check_ownership('/products/product-providers', 'owner_id')
 def remove_product_slot(user_id, instance_id):
     result = db.product_slots.delete_one({

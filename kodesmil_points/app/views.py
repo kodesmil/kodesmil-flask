@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_apispec import marshal_with, doc
-from kodesmil_common.auth import require_auth_and_permissions
+from kodesmil_common.auth import requires_auth
 
 from .models import ActivityPointsSchema
 from .app import db
@@ -17,7 +17,7 @@ KODESMIL_ACTIVITY_URL = 'http://172.21.0.2:5001/activities'
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivityPointsSchema())
 @content.route('/points', methods=['POST'])
-@require_auth_and_permissions()
+@requires_auth
 def add_new_points(*args, **kwargs):
     headers = {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ def add_new_points(*args, **kwargs):
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivityPointsSchema())
 @content.route('/points', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_points(*args, **kwargs):
     user_id = kwargs['user_id']
     schema = ActivityPointsSchema(many=True)
