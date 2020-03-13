@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_apispec import marshal_with, doc
-from kodesmil_common.auth import require_auth_and_permissions
+from kodesmil_common.auth import requires_auth
+from marshmallow import fields, ValidationError, missing
 
 from kodesmil_common.user_schema import get_user
 from . import db
@@ -33,7 +34,7 @@ def ping_points(token):
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/activities', methods=['POST'])
-@require_auth_and_permissions()
+@requires_auth
 def add_activity(*args, **kwargs):
     raw_data = request.get_json()
     raw_data['user_id'] = kwargs['user_id']
@@ -50,7 +51,7 @@ def add_activity(*args, **kwargs):
 @doc(tags=['Activity'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/activities', methods=['GET'])
-@require_auth_and_permissions()
+@requires_auth
 def get_last_activity(*args, **kwargs):
     schema = ActivitySchema()
     query = db.activities.find({'user_id': kwargs['user_id']}).sort('_id', -1).limit(1)
@@ -65,7 +66,7 @@ def get_last_activity(*args, **kwargs):
 @doc(tags=['GoogleFitActivities'], description='')
 @marshal_with(ActivitySchema())
 @content.route('/sync/google-fit', methods=['POST'])
-# @require_auth_and_permissions()
+# @requires_auth
 def add_google_fit_activity(*args, **kwargs):
     request_data = request.get_json()
     credentials = AccessTokenCredentials(request_data['access_token'], 'Flask/1.0')
