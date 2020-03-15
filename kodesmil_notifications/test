@@ -1,0 +1,29 @@
+curl --request POST \
+  --url 'https://bubbleus.eu.auth0.com/oauth/token' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data grant_type=password \
+  --data username=test@test.com \
+  --data password=dupadupa1! \
+  --data audience=https://kodesmil.com/auth \
+  --data scope=write:notifications \
+  --data 'client_id=xDZ0ytM2nyAYxFhrF1AqjqDG9b0tZAJj' \
+  --data client_secret=KsAB0976PFLLaXCjO7Sz4LKsubxm0uwJu7IHPSVKO634EsAiOKBwvKY02SO8b-0q
+
+
+  https://bubbleus.eu.auth0.com/authorize?response_type=code&client_id=mQPI9oo13Qt816prXn1Da3DtLawTRs56&redirect_uri=https://google.com
+
+https://bubbleus.eu.auth0.com/authorize?
+    response_type=code&
+    client_id=mQPI9oo13Qt816prXn1Da3DtLawTRs56&
+    redirect_uri=https://google.com/&
+    scope=write:notifications&
+    audience=https://kodesmil.com/auth
+
+curl --request POST \
+  --url 'https://bubbleus.eu.auth0.com/oauth/token' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data grant_type=authorization_code \
+  --data 'client_id=mQPI9oo13Qt816prXn1Da3DtLawTRs56' \
+  --data client_secret=m0gRc6iBOKpzQkL0MY0CYkn-bLpsmDz7R7I9JdvWlJ0qsyhacjyuKso2yOqKUcnT \
+  --data code=21_WjKuW83MuZo3s \
+  --data 'redirect_uri=https://google.com/'
