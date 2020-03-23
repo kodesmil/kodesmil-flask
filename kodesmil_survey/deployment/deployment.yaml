@@ -23,11 +23,11 @@ spec:
             - containerPort: 5000
           env:
             - name: APP_DEBUG
-              value: "True"
+              value: 'True'
             - name: APP_ENV
               value: prod
             - name: APP_PORT
-              value: "5000"
+              value: '5000'
             - name: MONGODB_DB_SURVEY
               value: kodesmil_survey
             - name: MONGODB_HOSTNAME
@@ -46,14 +46,21 @@ spec:
                   name: kodesmil-secret
                   key: MONGODB_USERNAME
             - name: AUTH0_DOMAIN
-                valueFrom:
-                  secretKeyRef:
-                    name: kodesmil-secret
-                    key: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: AUTH0_DOMAIN
             - name: API_IDENTIFIER
-                valueFrom:
-                  secretKeyRef:
-                    name: kodesmil-secret
-                    key: API_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: API_IDENTIFIER
           image: kodesmil/kodesmil_survey:latest
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

@@ -16,3 +16,4 @@ httplib2
 google-api-python-client==1.7.11
 oauth2client
 python-dateutil
+ptvsd

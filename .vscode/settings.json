@@ -1,0 +1,5 @@
+{
+    "squash.pythonSecret": "my_secret",
+    "squash.path": "/usr/local/bin/squashctl",
+    "squash.verbose": true
+}
