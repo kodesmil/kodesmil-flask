@@ -7,70 +7,105 @@ metadata:
      nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-  - host: www.activities.api.kodesmil.com
+  - host: prod-activities.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-activities
           servicePort: 5000
-  - host: activities.api.kodesmil.com
+  - host: dev-activities.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-activities
           servicePort: 5000
-  - host: www.survey.api.kodesmil.com
+  - host: local-activities.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: kodesmil-health-survey
+          serviceName: kodesmil-activities
           servicePort: 5000
-  - host: survey.api.kodesmil.com
+  - host: prod-survey.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: kodesmil-health-survey
+          serviceName: kodesmil-survey
           servicePort: 5000
-  - host: www.locations.api.kodesmil.com
+  - host: dev-survey.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-survey
+          servicePort: 5000
+  - host: local-survey.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-survey
+          servicePort: 5000
+  - host: prod-locations.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-locations
           servicePort: 5000
-  - host: locations.api.kodesmil.com
+  - host: dev-locations.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-locations
           servicePort: 5000
-  - host: www.products.api.kodesmil.com
+  - host: local-locations.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-locations
+          servicePort: 5000
+  - host: prod-products.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-products
           servicePort: 5000
-  - host: products.api.kodesmil.com
+  - host: dev-products.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-products
           servicePort: 5000
-  - host: www.points.api.kodesmil.com
+  - host: local-products.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-products
+          servicePort: 5000
+  - host: prod-points.api.kodesmil.com
     http:
       paths:
       - path: /
         backend:
           serviceName: kodesmil-points
           servicePort: 5000
-  - host: points.api.kodesmil.com
+  - host: dev-points.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-points
+          servicePort: 5000
+  - host: local-points.api.kodesmil.com
     http:
       paths:
       - path: /
