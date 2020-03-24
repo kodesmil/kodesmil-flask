@@ -12,6 +12,7 @@ message Notification {
     string content = 3;
     string user_id = 4;
     google.protobuf.Timestamp time = 5;
+
 }
 
 // CREATE
