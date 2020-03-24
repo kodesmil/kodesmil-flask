@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package notifications;
+
+import "google/protobuf/timestamp.proto";
+
+// MODEL
+
+message Notification {
+    string id = 1;
+    string title = 2;
+    string content = 3;
+    string user_id = 4;
+    google.protobuf.Timestamp time = 5;
+}
+
+// CREATE
+
+message NotificationCreateRequest {
+     Notification notification = 1; // id empty
+}
+
+message NotificationCreateResponse {
+    Notification notification = 1; // id filled in
+}
+
+// READ
+
+message NotificationReadRequest {
+    string id = 1;
+}
+
+message NotificationReadResponse {
+    Notification notification = 1;
+}
+
+// UPDATE
+
+message NotificationUpdateRequest {
+    Notification notification = 1;
+}
+
+message NotificationUpdateResponse {
+    Notification notification = 1;
+}
+
+// DELETE
+
+message NotificationDeleteRequest {
+    string id = 1;
+}
+
+message NotificationDeleteResponse {
+    bool success = 1;
+}
+
+// LIST
+
+message NotificationsListRequest {}
+
+message NotificationsListResponse {
+    Notification notification = 1;
+}
+
+// SERVICE
+
+service NotificationService {
+    rpc NotificationCreate(NotificationCreateRequest) returns (NotificationCreateResponse);
+    rpc NotificationRead(NotificationReadRequest) returns (NotificationReadResponse);
+    rpc NotificationUpdate(NotificationUpdateRequest) returns (NotificationUpdateResponse);
+    rpc NotificationDelete(NotificationDeleteRequest) returns (NotificationDeleteResponse);
+    rpc NotificationsList(NotificationsListRequest) returns (stream NotificationsListResponse);
+
+}
