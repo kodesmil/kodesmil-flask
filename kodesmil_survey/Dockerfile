@@ -2,24 +2,20 @@ FROM python:3.9.0a1-alpine3.10
 
 LABEL MAINTAINER="KodeSmil <hello@kodesmil.com>"
 
-ENV GROUP_ID=1000 \
-    USER_ID=1000
-
-RUN apk add build-base
-RUN apk add linux-headers
-
-WORKDIR /var/www/
-
-ADD . /var/www/
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip
 RUN pip install gunicorn
 
-RUN addgroup -g $GROUP_ID www
-RUN adduser -D -u $USER_ID -G www www -s /bin/sh
-RUN chown -R www /usr/local/lib/python3.9/site-packages
+RUN adduser -D python
+USER python
+WORKDIR /home/python
 
-USER www
+ARG DEBUG=0
+ENV FLASK_DEBUG $DEBUG
 
-EXPOSE 5000
+CMD [ "gunicorn", "-w", "1", "--bind", "0.0.0.0:5000", "src.wsgi", "--reload", "--timeout", "360"]
 
-CMD [ "gunicorn", "-w", "1", "--bind", "0.0.0.0:5000", "app.wsgi"]
+COPY --chown=python:python requirements.txt .
+ENV PATH="/home/python/.local/bin:${PATH}"
+RUN pip install --user -r requirements.txt
+
+COPY --chown=python:python src src

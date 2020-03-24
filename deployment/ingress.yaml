@@ -49,3 +49,31 @@ spec:
         backend:
           serviceName: kodesmil-locations
           servicePort: 5000
+  - host: www.products.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-products
+          servicePort: 5000
+  - host: products.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-products
+          servicePort: 5000
+  - host: www.points.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-points
+          servicePort: 5000
+  - host: points.api.kodesmil.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kodesmil-points
+          servicePort: 5000

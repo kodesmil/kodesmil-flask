@@ -5,9 +5,13 @@ metadata:
 build:
   artifacts:
   - image: kodesmil/kodesmil_activities
-    context: kodesmil_locations
-  - image: kodesmil/kodesmil_locations
     context: kodesmil_activities
+  - image: kodesmil/kodesmil_locations
+    context: kodesmil_locations
+  - image: kodesmil/kodesmil_points
+    context: kodesmil_points
+  - image: kodesmil/kodesmil_products
+    context: kodesmil_products
   - image: kodesmil/kodesmil_survey
     context: kodesmil_survey
 deploy:
@@ -15,9 +19,13 @@ deploy:
     manifests:
     - deployment/ingress.yaml
     - deployment/secret.yaml
-    - kodesmil_activities/deployment/deployment.yaml
-    - kodesmil_activities/deployment/service.yaml
-    - kodesmil_locations/deployment/deployment.yaml
-    - kodesmil_locations/deployment/service.yaml
-    - kodesmil_survey/deployment/deployment.yaml
-    - kodesmil_survey/deployment/service.yaml
+    - deployment/kodesmil_activities/deployment.yaml
+    - deployment/kodesmil_activities/service.yaml
+    - deployment/kodesmil_locations/deployment.yaml
+    - deployment/kodesmil_locations/service.yaml
+    - deployment/kodesmil_points/deployment.yaml
+    - deployment/kodesmil_points/service.yaml
+    - deployment/kodesmil_products/deployment.yaml
+    - deployment/kodesmil_products/service.yaml
+    - deployment/kodesmil_survey/deployment.yaml
+    - deployment/kodesmil_survey/service.yaml

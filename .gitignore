@@ -140,3 +140,5 @@ dmypy.json
 flask_monitoringdashboard.db
 
 /deployment/secret.yaml
+
+.history

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: kodesmil-products
+  name: kodesmil-products
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kodesmil-products
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: kodesmil-products
+    spec:
+      containers:
+        - name: kodesmil-products
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_DEBUG
+              value: 'True'
+            - name: APP_ENV
+              value: prod
+            - name: APP_PORT
+              value: '5000'
+            - name: MONGODB_DB_PRODUCTS
+              value: kodesmil_products
+            - name: MONGODB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_HOSTNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_PASSWORD
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: MONGODB_USERNAME
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: AUTH0_DOMAIN
+            - name: API_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: API_IDENTIFIER
+          image: kodesmil/kodesmil_products
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
