@@ -12,7 +12,7 @@ from six.moves.urllib.request import urlopen
 #INFO_URL = 'https://auth.kodesmil.com/oxauth/restv1/userinfo'
 
 AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
-API_IDENTIFIER = os.environ['API_IDENTIFIER']
+AUTH0_API_IDENTIFIER = os.environ['AUTH0_API_IDENTIFIER']
 ALGORITHMS = ["RS256"]
 
 
@@ -109,7 +109,7 @@ def requires_auth(f):
                     token,
                     rsa_key,
                     algorithms=ALGORITHMS,
-                    audience=API_IDENTIFIER,
+                    audience=AUTH0_API_IDENTIFIER,
                     issuer="https://"+AUTH0_DOMAIN+"/"
                 )
             except jwt.ExpiredSignatureError:

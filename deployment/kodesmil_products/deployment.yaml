@@ -4,7 +4,6 @@ metadata:
   labels:
     run: kodesmil-products
   name: kodesmil-products
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -23,9 +22,15 @@ spec:
             - containerPort: 5000
           env:
             - name: APP_DEBUG
-              value: 'True'
+              valueFrom:
+                configMapKeyRef:
+                  name: kodesmil-env
+                  key: flask.app.debug
             - name: APP_ENV
-              value: prod
+              valueFrom:
+                configMapKeyRef:
+                  name: kodesmil-env
+                  key: flask.app.flavor
             - name: APP_PORT
               value: '5000'
             - name: MONGODB_DB_PRODUCTS
@@ -34,27 +39,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: kodesmil-secret
-                  key: MONGODB_HOSTNAME
+                  key: mongodb.hostname
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kodesmil-secret
                   key: MONGODB_PASSWORD
+                  name: kodesmil-secret
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: kodesmil-secret
-                  key: MONGODB_USERNAME
+                  key: mongodb.username
             - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
                   name: kodesmil-secret
-                  key: AUTH0_DOMAIN
-            - name: API_IDENTIFIER
+                  key: auth0.domain
+            - name: AUTH0_API_IDENTIFIER
               valueFrom:
                 secretKeyRef:
                   name: kodesmil-secret
-                  key: API_IDENTIFIER
+                  key: auth0.api_identifier
           image: kodesmil/kodesmil_products
           resources:
             requests:

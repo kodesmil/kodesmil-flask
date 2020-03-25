@@ -17,8 +17,18 @@ build:
 deploy:
   kubectl:
     manifests:
-    - deployment/ingress.yaml
-    - deployment/secret.yaml
+    - deployment/namespace_dev/env.yaml
+    - deployment/namespace_dev/ingress.yaml
+    - deployment/namespace_dev/namespace.yaml
+    - deployment/namespace_dev/secret.yaml
+    - deployment/namespace_local/env.yaml
+    - deployment/namespace_local/ingress.yaml
+    - deployment/namespace_local/namespace.yaml
+    - deployment/namespace_local/secret.yaml
+    - deployment/namespace_prod/env.yaml
+    - deployment/namespace_prod/ingress.yaml
+    - deployment/namespace_prod/namespace.yaml
+    - deployment/namespace_prod/secret.yaml
     - deployment/kodesmil_activities/deployment.yaml
     - deployment/kodesmil_activities/service.yaml
     - deployment/kodesmil_locations/deployment.yaml

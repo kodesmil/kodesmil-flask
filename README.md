@@ -1,8 +1,8 @@
 # KodeSmil Microservices
 
-## Installation
+## Installation (for local)
 
-1. Create `deployments/secret.yaml` file ()
+1. Create `deployments/namespace_local/secret.yaml` file ()
     
     ```
     apiVersion: v1
@@ -15,7 +15,7 @@
     MONGODB_USERNAME: <PROVIDE>
     MONGODB_HOSTNAME: <PROVIDE>
     AUTH0_DOMAIN: <PROVIDE>
-    API_IDENTIFIER: <PROVIDE>
+    AUTH0_API_IDENTIFIER: <PROVIDE>
     ```
 
 2. Install [Docker](https://www.docker.com/products/docker-desktop)
