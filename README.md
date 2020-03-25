@@ -37,4 +37,4 @@ where 192.168.64.4 is output of `minikube ip`
 ## Run
 
 1. Start minikube cluster locally
-2. Start development with skaffold dev -n local
+2. Start development with `skaffold dev -n local`
