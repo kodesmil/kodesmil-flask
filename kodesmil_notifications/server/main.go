@@ -75,7 +75,33 @@ func (s *NotificationServiceServer) NotificationCreate(ctx context.Context, requ
 // READ
 
 func (s *NotificationServiceServer) NotificationRead(ctx context.Context, request *pb.NotificationReadRequest) (*pb.NotificationReadResponse, error) {
-
+	// convert string id (from proto) to mongoDB ObjectId
+	oid, err := primitive.ObjectIDFromHex(request.GetId())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
+	}
+	result := notificationsdb.FindOne(ctx, bson.M{"_id": oid})
+	// Create an empty BlogItem to write our decode result to
+	data := NotificationItem{}
+	// decode and write to data
+	if err := result.Decode(&data); err != nil {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find blog with Object Id %s: %v", request.GetId(), err))
+	}
+	var timestamp, err2 = ptypes.TimestampProto(data.Time)
+	if err2 != nil {
+		log.Fatalf("Error: %v", err2)
+	}
+	// Cast to ReadBlogRes type
+	response := &pb.NotificationReadResponse{
+		Notification: &pb.Notification{
+			Id:       oid.Hex(),
+			UserId:   data.UserID,
+			Title:    data.Title,
+			Content:  data.Content,
+			Time:	  timestamp,
+		},
+	}
+	return response, nil
 	// mock
 	return &pb.NotificationReadResponse{}, nil
 }
@@ -83,15 +109,75 @@ func (s *NotificationServiceServer) NotificationRead(ctx context.Context, reques
 // UPDATE
 
 func (s *NotificationServiceServer) NotificationUpdate(ctx context.Context, request *pb.NotificationUpdateRequest) (*pb.NotificationUpdateResponse, error) {
+	// Get the notification data from the request
+	notification := request.GetNotification()
 
-	// mock
-	return &pb.NotificationUpdateResponse{}, nil
+	// Convert the Id string to a MongoDB ObjectId
+	oid, err := primitive.ObjectIDFromHex(notification.GetId())
+	if err != nil {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			fmt.Sprintf("Could not convert the supplied notification id to a MongoDB ObjectId: %v", err),
+		)
+	}
+
+	// Convert the data to be updated into an unordered Bson document
+	update := bson.M{
+		"user_id": notification.GetUserId(),
+		"title":      notification.GetTitle(),
+		"content":    notification.GetContent(),
+		"time":		  notification.GetTime(),
+	}
+
+	// Convert the oid into an unordered bson document to search by id
+	filter := bson.M{"_id": oid}
+
+	// Result is the BSON encoded result
+	// To return the updated document instead of original we have to add options.
+	result := notificationsdb.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+
+	// Decode result and write it to 'decoded'
+	decoded := NotificationItem{}
+	err = result.Decode(&decoded)
+	if err != nil {
+		return nil, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("Could not find notification with supplied ID: %v", err),
+		)
+	}
+
+	var timestamp, err2 = ptypes.TimestampProto(decoded.Time)
+	if err2 != nil {
+		log.Fatalf("Error: %v", err2)
+	}
+
+	return &pb.NotificationUpdateResponse{
+		Notification: &pb.Notification{
+			Id:       decoded.ID.Hex(),
+			UserId:   decoded.UserID,
+			Title:    decoded.Title,
+			Content:  decoded.Content,
+			Time:     timestamp,
+		},
+	}, nil
 }
 
 // DELETE
 
 func (s *NotificationServiceServer) NotificationDelete(ctx context.Context, request *pb.NotificationDeleteRequest) (*pb.NotificationDeleteResponse, error) {
-
+	oid, err := primitive.ObjectIDFromHex(request.GetId())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
+	}
+	// DeleteOne returns DeleteResult which is a struct containing the amount of deleted docs (in this case only 1 always)
+	// So we return a boolean instead
+	_, err = notificationsdb.DeleteOne(ctx, bson.M{"_id": oid})
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find/delete notification with id %s: %v", request.GetId(), err))
+	}
+	return &pb.NotificationDeleteResponse{
+		Success: true,
+	}, nil
 	// mock
 	return &pb.NotificationDeleteResponse{}, nil
 }
@@ -117,6 +203,12 @@ func (s *NotificationServiceServer) NotificationsList(request *pb.NotificationsL
 		if err != nil {
 			return status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode data: %v", err))
 		}
+
+		// decode timestamp
+		var timestamp, err2 = ptypes.TimestampProto(data.Time)
+		if err2 != nil {
+			log.Fatalf("Error: %v", err2)
+		}
 		// If no error is found send blog over stream
 		stream.Send(&pb.NotificationsListResponse{
 			Notification: &pb.Notification{
@@ -124,7 +216,7 @@ func (s *NotificationServiceServer) NotificationsList(request *pb.NotificationsL
 				UserId:   data.UserID,
 				Content:  data.Content,
 				Title:    data.Title,
-				//Time:     data.Time,
+				Time:     timestamp,
 			},
 		})
 	}
@@ -160,7 +252,7 @@ func main() {
 
 	fmt.Println("Connecting to MongoDB...")
 	mongoCtx = context.Background()
-	db, err = mongo.Connect(mongoCtx, options.Client().ApplyURI(""))
+	db, err = mongo.Connect(mongoCtx, options.Client().ApplyURI("mongodb+srv://kodesmil:SwJ85oNBVNrACZUP@motim0-abanq.mongodb.net/test?authSource=admin&replicaSet=Motim0-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true"))
 	if err != nil {
 		log.Fatal(err)
 	}
