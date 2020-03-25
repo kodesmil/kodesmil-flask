@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kodesmil_common",
-    version="0.0.13",
+    version="0.0.14",
     author="KodeSmil",
     author_email="hello@kodesmil.com",
     description="A small example package",

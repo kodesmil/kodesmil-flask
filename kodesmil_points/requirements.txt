@@ -12,4 +12,4 @@ requests
 marshmallow_enum
 pymongo[srv]
 dnspython
-kodesmil_common
+kodesmil_common==0.0.14

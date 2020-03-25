@@ -11,7 +11,7 @@ Flask-PyMongo
 requests
 pymongo[srv]
 dnspython
-kodesmil_common
+kodesmil_common==0.0.14
 httplib2
 oauth2client
 python-dateutil

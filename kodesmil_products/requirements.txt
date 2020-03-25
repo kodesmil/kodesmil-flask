@@ -10,5 +10,5 @@ apispec
 flask_apispec
 Flask-PyMongo
 requests
-kodesmil_common
+kodesmil_common==0.0.14
 dnspython
