@@ -11,11 +11,11 @@
     name: kodesmil-secret
     type: Opaque
     data:
-    MONGODB_PASSWORD: <PROVIDE>
-    MONGODB_USERNAME: <PROVIDE>
-    MONGODB_HOSTNAME: <PROVIDE>
-    AUTH0_DOMAIN: <PROVIDE>
-    AUTH0_API_IDENTIFIER: <PROVIDE>
+        mongodb.password: <PROVIDE>
+        mongodb.username: <PROVIDE>
+        mongodb.hostname: <PROVIDE>
+        auth0.domain: <PROVIDE>
+        auth0.api_identifier: <PROVIDE>
     ```
 
 2. Install [Docker](https://www.docker.com/products/docker-desktop)
@@ -37,4 +37,7 @@ where 192.168.64.4 is output of `minikube ip`
 ## Run
 
 1. Start minikube cluster locally
-2. Start development with `skaffold dev -n local`
+2. Start development with 
+`skaffold run -f skaffold.local.yaml -n local`
+or if you want to prune images
+`skaffold run -f skaffold.local.yaml -n local --no-prune=false --cache-artifacts=false`

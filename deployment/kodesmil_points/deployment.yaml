@@ -43,8 +43,8 @@ spec:
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: MONGODB_PASSWORD
                   name: kodesmil-secret
+                  key: mongodb.password
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
