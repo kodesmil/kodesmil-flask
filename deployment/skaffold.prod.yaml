@@ -15,7 +15,7 @@ build:
     - image: kodesmil/kodesmil_survey
       context: flask_survey
     - image: kodesmil/go_notifications
-        context: go_notifications
+      context: go_notifications
 deploy:
   kubectl:
     manifests:
