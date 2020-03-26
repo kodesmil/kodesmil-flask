@@ -13,3 +13,21 @@
 [submodule "plant"]
 	path = plant
 	url = git@github.com:kodesmil/plant
+[submodule "flask_points"]
+	path = flask_points
+	url = git@github.com:kodesmil/flask_points
+[submodule "flask_activities"]
+	path = flask_activities
+	url = git@github.com:kodesmil/flask_activities
+[submodule "flask_products"]
+	path = flask_products
+	url = git@github.com:kodesmil/flask_products
+[submodule "flask_survey"]
+	path = flask_survey
+	url = git@github.com:kodesmil/flask_survey
+[submodule "flask_locations"]
+	path = flask_locations
+	url = git@github.com:kodesmil/flask_locations
+[submodule "flask_common"]
+	path = flask_common
+	url = git@github.com:kodesmil/flask_common
