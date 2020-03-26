@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: go_notifications
+  name: go_notifications
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: go_notifications
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: go_notifications
+    spec:
+      containers:
+        - name: go_notifications
+          ports:
+            - containerPort: 50051
+          env:
+            - name: APP_PORT
+              value: "50051"
+            - name: MONGODB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.hostname
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.password
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.username
+          image: kodesmil/go_notifications
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "48Mi"
+              cpu: "20m"

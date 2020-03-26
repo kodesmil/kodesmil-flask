@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: go_notifications
+  name: go_notifications
+spec:
+  ports:
+  - name: app
+    port: 50051
+    targetPort: 50051
+  type: NodePort
+  selector:
+    run: go_notifications

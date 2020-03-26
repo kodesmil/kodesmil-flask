@@ -14,6 +14,8 @@ build:
       context: flask_products
     - image: kodesmil/kodesmil_survey
       context: flask_survey
+    - image: kodesmil/go_notifications
+        context: go_notifications
 deploy:
   kubectl:
     manifests:
@@ -31,3 +33,5 @@ deploy:
       - deployment/kodesmil_products/service.yaml
       - deployment/kodesmil_survey/deployment.yaml
       - deployment/kodesmil_survey/service.yaml
+      - deployment/go_notifications/deployment.yaml
+      - deployment/go_notifications/service.yaml

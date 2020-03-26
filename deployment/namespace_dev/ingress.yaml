@@ -15,6 +15,7 @@ spec:
         - locations.dev.api.kodesmil.com
         - products.dev.api.kodesmil.com
         - points.dev.api.kodesmil.com
+        - notifications.dev.api.kodesmil.com
       secretName: letsencrypt-cert
   rules:
     - host: activities.dev.api.kodesmil.com
@@ -52,3 +53,10 @@ spec:
             backend:
               serviceName: kodesmil-points
               servicePort: 5000
+    - host: notifications.dev.api.kodesmil.com
+        http:
+          paths:
+              - path: /
+                backend:
+                  serviceName: go_notifications
+                  servicePort: 50051
