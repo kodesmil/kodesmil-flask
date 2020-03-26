@@ -5,28 +5,28 @@ metadata:
 build:
   artifacts:
     - image: kodesmil/kodesmil_activities
-      context: ../flask_activities
+      context: flask_activities
     - image: kodesmil/kodesmil_locations
-      context: ../flask_locations
+      context: flask_locations
     - image: kodesmil/kodesmil_points
-      context: ../flask_points
+      context: flask_points
     - image: kodesmil/kodesmil_products
-      context: ../flask_products
+      context: flask_products
     - image: kodesmil/kodesmil_survey
-      context: ../flask_survey
+      context: flask_survey
 deploy:
   kubectl:
     manifests:
-      - namespace_local/env.yaml
-      - namespace_local/secret.yaml
-      - namespace_local/ingress.yaml
-      - kodesmil_activities/deployment.yaml
-      - kodesmil_activities/service.yaml
-      - kodesmil_locations/deployment.yaml
-      - kodesmil_locations/service.yaml
-      - kodesmil_points/deployment.yaml
-      - kodesmil_points/service.yaml
-      - kodesmil_products/deployment.yaml
-      - kodesmil_products/service.yaml
-      - kodesmil_survey/deployment.yaml
-      - kodesmil_survey/service.yaml
+      - deployment/namespace_local/env.yaml
+      - deployment/namespace_local/secret.yaml
+      - deployment/namespace_local/ingress.yaml
+      - deployment/kodesmil_activities/deployment.yaml
+      - deployment/kodesmil_activities/service.yaml
+      - deployment/kodesmil_locations/deployment.yaml
+      - deployment/kodesmil_locations/service.yaml
+      - deployment/kodesmil_points/deployment.yaml
+      - deployment/kodesmil_points/service.yaml
+      - deployment/kodesmil_products/deployment.yaml
+      - deployment/kodesmil_products/service.yaml
+      - deployment/kodesmil_survey/deployment.yaml
+      - deployment/kodesmil_survey/service.yaml
