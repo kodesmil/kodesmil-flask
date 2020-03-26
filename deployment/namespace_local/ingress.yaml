@@ -48,5 +48,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: go_notifications
+              serviceName: go-notifications
               servicePort: 50051

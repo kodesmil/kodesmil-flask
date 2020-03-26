@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: go_notifications
-  name: go_notifications
+    run: go-notifications
+  name: go-notifications
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      run: go_notifications
+      run: go-notifications
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        run: go_notifications
+        run: go-notifications
     spec:
       containers:
-        - name: go_notifications
+        - name: go-notifications
           ports:
             - containerPort: 50051
           env:

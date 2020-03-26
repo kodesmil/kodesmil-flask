@@ -10,11 +10,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - activities.prod.api.kodesmil.com
-        - survey.prod.api.kodesmil.com
-        - locations.prod.api.kodesmil.com
-        - products.prod.api.kodesmil.com
-        - points.prod.api.kodesmil.com
+        - "*.prod.api.kodesmil.com"
       secretName: letsencrypt-cert
   rules:
     - host: activities.prod.api.kodesmil.com
@@ -57,5 +53,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: go_notifications
+              serviceName: go-notifications
               servicePort: 50051
