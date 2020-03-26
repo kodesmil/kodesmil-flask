@@ -31,3 +31,6 @@
 [submodule "flask_common"]
 	path = flask_common
 	url = git@github.com:kodesmil/flask_common
+[submodule "go_notifications"]
+	path = go_notifications
+	url = git@github.com:kodesmil/go_notifications.git
