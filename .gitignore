@@ -142,3 +142,4 @@ flask_monitoringdashboard.db
 /deployment/*/secret.yaml
 
 .history
+key.json

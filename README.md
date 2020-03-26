@@ -37,7 +37,12 @@ where 192.168.64.4 is output of `minikube ip`
 ## Run
 
 1. Start minikube cluster locally
-2. Start development with 
+2. Start local dev with 
 `skaffold run -f skaffold.local.yaml -n local`
 or if you want to prune images
 `skaffold run -f skaffold.local.yaml -n local --no-prune=false --cache-artifacts=false`
+
+## Dev & Production Servers
+
+1. Create certificate Issuer
+`kubectl apply -f deployment/issuer.yaml`

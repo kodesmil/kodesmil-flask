@@ -63,8 +63,8 @@ spec:
           image: kodesmil/kodesmil_points
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "250m"
+              memory: "32Mi"
+              cpu: "10m"
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: "48Mi"
+              cpu: "20m"

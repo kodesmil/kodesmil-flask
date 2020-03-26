@@ -4,30 +4,30 @@ metadata:
   name: kodesmil-flask
 build:
   artifacts:
-  - image: kodesmil/kodesmil_activities
-    context: kodesmil_activities
-  - image: kodesmil/kodesmil_locations
-    context: kodesmil_locations
-  - image: kodesmil/kodesmil_points
-    context: kodesmil_points
-  - image: kodesmil/kodesmil_products
-    context: kodesmil_products
-  - image: kodesmil/kodesmil_survey
-    context: kodesmil_survey
+    - image: kodesmil/kodesmil_activities
+      context: kodesmil_activities
+    - image: kodesmil/kodesmil_locations
+      context: kodesmil_locations
+    - image: kodesmil/kodesmil_points
+      context: kodesmil_points
+    - image: kodesmil/kodesmil_products
+      context: kodesmil_products
+    - image: kodesmil/kodesmil_survey
+      context: kodesmil_survey
 deploy:
   kubectl:
     manifests:
-    - deployment/namespace_dev/namespace.yaml
-    - deployment/namespace_dev/env.yaml
-    - deployment/namespace_dev/ingress.yaml
-    - deployment/namespace_dev/secret.yaml
-    - deployment/kodesmil_activities/deployment.yaml
-    - deployment/kodesmil_activities/service.yaml
-    - deployment/kodesmil_locations/deployment.yaml
-    - deployment/kodesmil_locations/service.yaml
-    - deployment/kodesmil_points/deployment.yaml
-    - deployment/kodesmil_points/service.yaml
-    - deployment/kodesmil_products/deployment.yaml
-    - deployment/kodesmil_products/service.yaml
-    - deployment/kodesmil_survey/deployment.yaml
-    - deployment/kodesmil_survey/service.yaml
+      - deployment/namespace_dev/namespace.yaml
+      - deployment/namespace_dev/env.yaml
+      - deployment/namespace_dev/ingress.yaml
+      - deployment/namespace_dev/secret.yaml
+      - deployment/kodesmil_activities/deployment.yaml
+      - deployment/kodesmil_activities/service.yaml
+      - deployment/kodesmil_locations/deployment.yaml
+      - deployment/kodesmil_locations/service.yaml
+      - deployment/kodesmil_points/deployment.yaml
+      - deployment/kodesmil_points/service.yaml
+      - deployment/kodesmil_products/deployment.yaml
+      - deployment/kodesmil_products/service.yaml
+      - deployment/kodesmil_survey/deployment.yaml
+      - deployment/kodesmil_survey/service.yaml
