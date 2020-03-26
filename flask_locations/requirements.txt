@@ -1,0 +1,17 @@
+flask
+python-dotenv
+python-jose
+flask-cors
+six
+marshmallow
+#flask_monitoringdashboard
+apispec
+flask_apispec
+Flask-PyMongo
+requests
+pymongo[srv]
+dnspython
+kodesmil_common==0.0.14
+httplib2
+oauth2client
+python-dateutil

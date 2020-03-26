@@ -1,0 +1,33 @@
+apiVersion: skaffold/v2beta1
+kind: Config
+metadata:
+  name: kodesmil_universe
+build:
+  artifacts:
+    - image: kodesmil/kodesmil_activities
+      context: ../flask_activities
+    - image: kodesmil/kodesmil_locations
+      context: ../flask_locations
+    - image: kodesmil/kodesmil_points
+      context: ../flask_points
+    - image: kodesmil/kodesmil_products
+      context: ../flask_products
+    - image: kodesmil/kodesmil_survey
+      context: ../flask_survey
+deploy:
+  kubectl:
+    manifests:
+      - namespace_prod/namespace.yaml
+      - namespace_prod/env.yaml
+      - namespace_prod/secret.yaml
+      - namespace_prod/ingress.yaml
+      - kodesmil_activities/deployment.yaml
+      - kodesmil_activities/service.yaml
+      - kodesmil_locations/deployment.yaml
+      - kodesmil_locations/service.yaml
+      - kodesmil_points/deployment.yaml
+      - kodesmil_points/service.yaml
+      - kodesmil_products/deployment.yaml
+      - kodesmil_products/service.yaml
+      - kodesmil_survey/deployment.yaml
+      - kodesmil_survey/service.yaml

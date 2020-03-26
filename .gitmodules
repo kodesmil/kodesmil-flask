@@ -1,0 +1,33 @@
+[submodule "flask_common"]
+	path = flask_common
+	url = git@github.com:kodesmil/flask_common
+[submodule "flask_points"]
+	path = flask_points
+	url = git@github.com:kodesmil/flask_points
+[submodule "flask_products"]
+	path = flask_products
+	url = git@github.com:kodesmil/flask_products
+[submodule "flask_locations"]
+	path = flask_locations
+	url = git@github.com:kodesmil/flask_products
+[submodule "flask_survey"]
+	path = flask_survey
+	url = git@github.com:kodesmil/flask_survey
+[submodule "flask_activities"]
+	path = flask_activities
+	url = git@github.com:kodesmil/flask_activities
+[submodule "gatsby_fotosmil"]
+	path = gatsby_fotosmil
+	url = git@github.com:kodesmil/gatsby_fotosmil
+[submodule "gatsby_motim"]
+	path = gatsby_motim
+	url = git@github.com:kodesmil/gatsby_motim
+[submodule "gatsby_abli"]
+	path = gatsby_abli
+	url = git@github.com:kodesmil/gatsby_abli
+[submodule "kutter"]
+	path = kutter
+	url = git@github.com:kodesmil/kutter
+[submodule "plant"]
+	path = plant
+	url = git@github.com:kodesmil/plant

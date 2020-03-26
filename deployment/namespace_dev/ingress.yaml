@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kodesmil-ingress
+  namespace: dev
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: "kodesmil-letsencrypt"
+spec:
+  tls:
+    - hosts:
+        - activities.dev.api.kodesmil.com
+        - survey.dev.api.kodesmil.com
+        - locations.dev.api.kodesmil.com
+        - products.dev.api.kodesmil.com
+        - points.dev.api.kodesmil.com
+      secretName: letsencrypt-cert
+  rules:
+    - host: activities.dev.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kodesmil-activities
+              servicePort: 5000
+    - host: survey.dev.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kodesmil-survey
+              servicePort: 5000
+    - host: locations.dev.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kodesmil-locations
+              servicePort: 5000
+    - host: products.dev.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kodesmil-products
+              servicePort: 5000
+    - host: points.dev.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kodesmil-points
+              servicePort: 5000

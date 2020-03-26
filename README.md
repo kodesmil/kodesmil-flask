@@ -1,71 +1,49 @@
-# Auth0 + Python + Flask API Seed
+# KodeSmil Universe
 
-This is the seed project you need to use if you're going to create a Python + Flask API.
-If you just want to create a Regular Python WebApp, please
-check [this project](https://github.com/auth0-samples/auth0-python-web-app/tree/master/01-Login)
+## KodeSmil Microservices
 
-Please check our [Quickstart](https://auth0.com/docs/quickstart/backend/python) to better understand this sample.
+### Installation (for local)
 
-# Running the example
+1. Create `deployments/namespace_local/secret.yaml` file ()
+    
+    ```
+    apiVersion: v1
+    kind: Secret
+    metadata:
+    name: kodesmil-secret
+    type: Opaque
+    data:
+        mongodb.password: <PROVIDE>
+        mongodb.username: <PROVIDE>
+        mongodb.hostname: <PROVIDE>
+        auth0.domain: <PROVIDE>
+        auth0.api_identifier: <PROVIDE>
+    ```
 
-In order to run the example you need to have `python` and `pip` installed.
+2. Install [Docker](https://www.docker.com/products/docker-desktop)
+3. Install [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
+4. Install [Skaffold](https://skaffold.dev/docs/install/)
+5. Start your cluster with `minikube start`
+5. Add entries to your `/etc/hosts`
 
-You also need to set your Auth0 Domain and the API's audience as environment variables with the following names
-respectively: `AUTH0_DOMAIN` and `API_IDENTIFIER`, which is the audience of your API. You can find an example in the
-`env.example` file.
-
-For that, if you just create a file named `.env` in the directory and set the values like the following,
-the app will just work:
-
-```bash
-# .env file
-AUTH0_DOMAIN=example.auth0.com
-API_IDENTIFIER={API_IDENTIFIER}
+```
+192.168.64.4    local-points.api.kodesmil.com
+192.168.64.4    local-products.api.kodesmil.com
+192.168.64.4    local-survey.api.kodesmil.com
+192.168.64.4    local-activities.api.kodesmil.com
+192.168.64.4    local-locations.api.kodesmil.com
 ```
 
-Once you've set those 2 environment variables:
+where 192.168.64.4 is output of `minikube ip`
 
-1. Install the needed dependencies with `pip install -r requirements.txt`
-2. Start the server with `python server.py`
-3. Try calling [http://localhost:3010/api/public](http://localhost:3010/api/public)
+### Run
 
-# Testing the API
+1. Start minikube cluster locally
+2. Start local dev with 
+`skaffold run -f deployment/skaffold.local.yaml -n local`
 
-You can then try to do a GET to [http://localhost:3010/api/private](http://localhost:3010/api/private) which will
-throw an error if you don't send an access token signed with RS256 with the appropriate issuer and audience in the
-Authorization header. 
+### Dev & Production Servers
 
-You can also try to do a GET to 
-[http://localhost:3010/api/private-scoped](http://localhost:3010/api/private-scoped) which will throw an error if
-you don't send an access token with the scope `read:messages` signed with RS256 with the appropriate issuer and audience
-in the Authorization header.
-
-# Running the example with Docker
-
-In order to run the sample with [Docker](https://www.docker.com/) you need to add the `AUTH0_DOMAIN` and `API_ID`
-to the `.env` filed as explained [previously](#running-the-example) and then
-
-1. Execute in command line `sh exec.sh` to run the Docker in Linux, or `.\exec.ps1` to run the Docker in Windows.
-2. Try calling [http://localhost:3010/api/public](http://localhost:3010/api/public)
-
-# Ports
-## chat
-    - empty
-
-## content
-    - 5000
-    - 80
-    - 443
-
-## activities
-    - 5001
-    - 81
-    - 444
-
-## points
-    - 5002
-    - 82
-    - 445
-
-## fit
-    - 5003
+1. Install cert-manager Helm
+2. Create certificate Issuer
+`kubectl apply -f deploment/issuer.yaml`

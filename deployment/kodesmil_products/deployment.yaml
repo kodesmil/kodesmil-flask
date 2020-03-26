@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: kodesmil-products
+  name: kodesmil-products
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kodesmil-products
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: kodesmil-products
+    spec:
+      containers:
+        - name: kodesmil-products
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: kodesmil-env
+                  key: flask.app.debug
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kodesmil-env
+                  key: flask.app.flavor
+            - name: APP_PORT
+              value: '5000'
+            - name: MONGODB_DB_PRODUCTS
+              value: kodesmil_products
+            - name: MONGODB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.hostname
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.password
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: mongodb.username
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: auth0.domain
+            - name: AUTH0_API_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: auth0.api_identifier
+          image: kodesmil/kodesmil_products
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "48Mi"
+              cpu: "20m"

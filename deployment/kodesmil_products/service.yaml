@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: kodesmil-products
+  name: kodesmil-products
+spec:
+  ports:
+  - name: app
+    port: 5000
+    targetPort: 5000
+  type: NodePort
+  selector:
+    run: kodesmil-products
