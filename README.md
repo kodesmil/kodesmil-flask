@@ -27,11 +27,11 @@
 5. Add entries to your `/etc/hosts`
 
 ```
-192.168.64.4    local-points.api.kodesmil.com
-192.168.64.4    local-products.api.kodesmil.com
-192.168.64.4    local-survey.api.kodesmil.com
-192.168.64.4    local-activities.api.kodesmil.com
-192.168.64.4    local-locations.api.kodesmil.com
+192.168.64.4    points.local.api.kodesmil.com
+192.168.64.4    products.local.api.kodesmil.com
+192.168.64.4    survey.local.api.kodesmil.com
+192.168.64.4    activities.local.api.kodesmil.com
+192.168.64.4    locations.local.api.kodesmil.com
 ```
 
 where 192.168.64.4 is output of `minikube ip`
