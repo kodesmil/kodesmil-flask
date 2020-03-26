@@ -44,5 +44,6 @@ or if you want to prune images
 
 ## Dev & Production Servers
 
-1. Create certificate Issuer
-`kubectl apply -f deployment/issuer.yaml`
+1. Install cert-manager Helm
+2. Create certificate Issuer
+`kubectl apply -f deploment/issuer.yaml`
