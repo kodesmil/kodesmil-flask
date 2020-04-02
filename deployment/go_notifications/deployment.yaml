@@ -38,6 +38,11 @@ spec:
                 secretKeyRef:
                   name: kodesmil-secret
                   key: mongodb.username
+            - name: FIREBASE_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: firebase.secret
           image: kodesmil/go_notifications
           resources:
             requests:
