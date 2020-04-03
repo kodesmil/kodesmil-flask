@@ -10,12 +10,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - activities.dev.api.kodesmil.com
-        - survey.dev.api.kodesmil.com
-        - locations.dev.api.kodesmil.com
-        - products.dev.api.kodesmil.com
-        - points.dev.api.kodesmil.com
-        - notifications.dev.api.kodesmil.com
+        - "*.dev.api.kodesmil.com"
       secretName: letsencrypt-cert
   rules:
     - host: activities.dev.api.kodesmil.com

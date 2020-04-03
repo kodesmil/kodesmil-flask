@@ -5,7 +5,7 @@ metadata:
     run: go-notifications
   name: go-notifications
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       run: go-notifications

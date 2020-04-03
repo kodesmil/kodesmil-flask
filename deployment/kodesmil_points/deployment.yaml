@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: kodesmil-secret
                   key: auth0.api_identifier
+            - name: FIREBASE_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  name: kodesmil-secret
+                  key: firebase.secret
           image: kodesmil/kodesmil_points
           resources:
             requests:
