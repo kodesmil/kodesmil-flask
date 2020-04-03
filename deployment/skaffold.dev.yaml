@@ -24,6 +24,7 @@ deploy:
       - deployment/namespace_dev/env.yaml
       - deployment/namespace_dev/ingress.yaml
       - deployment/namespace_dev/secret.yaml
+      - deployment/namespace_dev/secret_files.yaml
       - deployment/kodesmil_activities/deployment.yaml
       - deployment/kodesmil_activities/service.yaml
       - deployment/kodesmil_locations/deployment.yaml

@@ -16,8 +16,6 @@
         mongodb.password: <PROVIDE>
         mongodb.username: <PROVIDE>
         mongodb.hostname: <PROVIDE>
-        auth0.domain: <PROVIDE>
-        auth0.api_identifier: <PROVIDE>
     ```
 
 2. Install [Docker](https://www.docker.com/products/docker-desktop)

@@ -38,16 +38,21 @@ spec:
                 secretKeyRef:
                   name: kodesmil-secret
                   key: mongodb.username
-            - name: FIREBASE_CONFIG
-              valueFrom:
-                secretKeyRef:
-                  name: kodesmil-secret
-                  key: firebase.secret
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/etc/secrets/firebase-service-config.json"
           image: kodesmil/go_notifications
           resources:
             requests:
-              memory: "32Mi"
-              cpu: "10m"
+              memory: "128Mi"
+              cpu: "50m"
             limits:
-              memory: "48Mi"
-              cpu: "20m"
+              memory: "128Mi"
+              cpu: "50m"
+          volumeMounts:
+            - name: secrets
+              mountPath: "/etc/secrets"
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: kodesmil-secret-files

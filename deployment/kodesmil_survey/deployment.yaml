@@ -50,21 +50,8 @@ spec:
                 secretKeyRef:
                   name: kodesmil-secret
                   key: mongodb.username
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: kodesmil-secret
-                  key: auth0.domain
-            - name: AUTH0_API_IDENTIFIER
-              valueFrom:
-                secretKeyRef:
-                  name: kodesmil-secret
-                  key: auth0.api_identifier
-            - name: FIREBASE_CONFIG
-              valueFrom:
-                secretKeyRef:
-                  name: kodesmil-secret
-                  key: firebase.secret
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/etc/secrets/firebase-service-config.json"
           image: kodesmil/kodesmil_survey
           resources:
             requests:
@@ -73,11 +60,11 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "50m"
-      volumeMounts:
+          volumeMounts:
+            - name: secrets
+              mountPath: "/etc/secrets"
+              readOnly: true
+      volumes:
         - name: secrets
-          mountPath: "/etc/secrets"
-          readOnly: true
-    volumes:
-      - name: secrets
-        secret:
-          secretName: kodesmil-secret-files
+          secret:
+            secretName: kodesmil-secret-files

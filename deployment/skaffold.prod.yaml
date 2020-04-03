@@ -22,6 +22,7 @@ deploy:
       - deployment/namespace_prod/namespace.yaml
       - deployment/namespace_prod/env.yaml
       - deployment/namespace_prod/secret.yaml
+      - deployment/namespace_prod/secret_files.yaml
       - deployment/namespace_prod/ingress.yaml
       - deployment/kodesmil_activities/deployment.yaml
       - deployment/kodesmil_activities/service.yaml
