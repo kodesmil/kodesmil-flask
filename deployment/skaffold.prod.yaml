@@ -24,6 +24,7 @@ deploy:
       - deployment/namespace_prod/secret.yaml
       - deployment/namespace_prod/secret_files.yaml
       - deployment/namespace_prod/ingress.yaml
+      - deployment/namespace_prod/ingress_grpc.yaml
       - deployment/kodesmil_activities/deployment.yaml
       - deployment/kodesmil_activities/service.yaml
       - deployment/kodesmil_locations/deployment.yaml

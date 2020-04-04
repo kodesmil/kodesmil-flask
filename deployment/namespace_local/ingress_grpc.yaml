@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kodesmil-grpc-ingress
+  namespace: local
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+spec:
+  rules:
+    - host: notifications.local.api.kodesmil.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: go-notifications
+              servicePort: 50051

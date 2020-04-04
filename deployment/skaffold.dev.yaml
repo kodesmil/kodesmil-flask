@@ -23,6 +23,7 @@ deploy:
       - deployment/namespace_dev/namespace.yaml
       - deployment/namespace_dev/env.yaml
       - deployment/namespace_dev/ingress.yaml
+      - deployment/namespace_dev/ingress_grpc.yaml
       - deployment/namespace_dev/secret.yaml
       - deployment/namespace_dev/secret_files.yaml
       - deployment/kodesmil_activities/deployment.yaml

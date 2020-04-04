@@ -48,10 +48,3 @@ spec:
             backend:
               serviceName: kodesmil-points
               servicePort: 5000
-    - host: notifications.dev.api.kodesmil.com
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: go-notifications
-              servicePort: 50051
